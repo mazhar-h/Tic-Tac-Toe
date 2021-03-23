@@ -1,8 +1,10 @@
 # Tic-Tac-Toe
-Tic-Tac-Toe Game
 
 ASCII style Tic-Tac-Toe playable through CLI.
 
-How to run:
-- Compile *DemoTTT.java* and *TicTacToe.java*
-- Run *DemoTTT*
+How to run manual player vs player mode (Default):
+- Compile *CLIDemo.java*, "GameEngine.java*, *AI.java*
+- Run *CLIDemo*
+
+How to run player vs AI mode:
+ - Run *CLIDemo AI*
