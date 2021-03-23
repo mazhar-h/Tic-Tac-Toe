@@ -5,7 +5,7 @@
 *
 *Date: 03/22/2021
 *@author  Mazhar Hossain
-*@version 0.0.14
+*@version 0.0.18
 */
 
 public class GameEngine {
@@ -14,6 +14,7 @@ public class GameEngine {
 	private char placeholder = '_';
 	
 	public GameEngine(){
+		
 		//fill board with placeholder '_'
 		for(int row = 0; row < board.length; row++)
 			for(int column = 0; column < board[0].length; column++)
@@ -127,7 +128,7 @@ public class GameEngine {
 			return false;
 	}
 	
-	public boolean checkWinCondition(char icon){
+	public boolean isWin(char icon){
 		if ( checkHorizontals(icon) || checkVerticals(icon) || checkDiagonals(icon) )
 			return true;
 		else

@@ -5,19 +5,27 @@
 *
 *Date: 03/22/2021
 *@author  Mazhar Hossain
-*@version 0.0.14
+*@version 0.0.18
 */
 import java.util.Random;
 
 public class AI {
 	
-	Random rand = new Random(System.currentTimeMillis());
+	private Random rand = new Random(System.currentTimeMillis());
+	private char maxIcon;	//maximizing player's icon
+	private char minIcon;	//minimizing player's icon
+	
+	public AI (char maximizingPlayer, char minimizingPlayer){
+		this.maxIcon = maximizingPlayer;
+		this.minIcon = minimizingPlayer;
+	}
 	
 	public int[] randomMove(GameEngine board){
 		
 		int[] coordinate = new int[2];
 		
-		while(true){
+		while(true)
+		{
 			int x = rand.nextInt(3);
 			int y = rand.nextInt(3);
 			
@@ -31,17 +39,16 @@ public class AI {
 		return coordinate;
 	}
 	
-	public boolean isTerminal(GameEngine board){
+	private boolean isTerminal(GameEngine board){
 		
 		//check if winning or draw state
-		if ( board.checkWinCondition('X') || 
-				board.checkWinCondition('O') || board.isDraw() )
+		if ( board.isWin(minIcon) || board.isWin(maxIcon) || board.isDraw() )
 			return true;
 		else
 			return false;
 	}
 	
-	public int getHeuristicValue(GameEngine board){
+	private int getHeuristicValue(GameEngine board){
 		
 		/*
 		 *  O 	: 1
@@ -49,7 +56,7 @@ public class AI {
 		 *  X	: -1
 		 */
 		
-		if ( board.checkWinCondition('O') )
+		if ( board.isWin(maxIcon) )
 			return 1;
 		else if (board.isDraw())
 			return 0;
@@ -57,7 +64,7 @@ public class AI {
 			return -1;
 	}
 	
-	public int minimax(GameEngine board, int depth, boolean maximizingPlayer){
+	private int minimax(GameEngine board, int depth, boolean maximizingPlayer){
 		
 		if ( depth == 0 || isTerminal(board) )
 			return getHeuristicValue(board);
@@ -71,7 +78,7 @@ public class AI {
 					if(board.isEmpty(row, column))
 					{
 						char[][] b = board.getBoard();
-						b[row][column] = 'O';
+						b[row][column] = maxIcon;
 						GameEngine newBoard = new GameEngine(b);
 						value = Math.max(value, minimax(newBoard, depth - 1, false) );
 					}
@@ -87,7 +94,7 @@ public class AI {
 					if(board.isEmpty(row, column))
 					{
 						char[][] b = board.getBoard();
-						b[row][column] = 'X';
+						b[row][column] = minIcon;
 						GameEngine newBoard = new GameEngine(b);
 						value = Math.min(value, minimax(newBoard, depth - 1, true) );
 					}
@@ -107,7 +114,7 @@ public class AI {
 				if( board.isEmpty(row, column) )
 				{
 					char[][] b = board.getBoard();
-					b[row][column] = 'O';
+					b[row][column] = maxIcon;
 					GameEngine newBoard = new GameEngine(b);
 					int v = minimax(newBoard, turnsLeft, false );
 					
