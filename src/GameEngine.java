@@ -5,20 +5,22 @@
 *
 *Date: 03/22/2021
 *@author  Mazhar Hossain
-*@version 0.0.18
+*@version 0.0.50
 */
+import java.util.List;
+import java.util.LinkedList;
 
 public class GameEngine {
 	
+	private static final char PLACEHOLDER = '_';
 	private char[][] board = new char[3][3];
-	private char placeholder = '_';
 	
 	public GameEngine(){
 		
-		//fill board with placeholder '_'
+		//fill board with PLACEHOLDER
 		for(int row = 0; row < board.length; row++)
 			for(int column = 0; column < board[0].length; column++)
-				board[row][column] = placeholder;
+				board[row][column] = PLACEHOLDER;
 	}
 	
 	public GameEngine(char[][] board){
@@ -41,20 +43,20 @@ public class GameEngine {
 		return copy;
 	}
 	
-	public boolean isEmpty(int x, int y){
+	public boolean isEmpty(int row, int column){
 		
-		if (board[x][y] == placeholder)
+		if (board[row][column] == PLACEHOLDER)
 			return true;
 		else
 			return false;
 	}
 	
-	public boolean makeMove(char icon, int x, int y){
+	public boolean makeMove(char icon, int row, int column){
 		
-		if (!isEmpty(x, y))
+		if (!isEmpty(row, column))
 			return false;
 		else
-			board[x][y] = icon;
+			board[row][column] = icon;
 		
 		return true;
 	}
@@ -67,9 +69,14 @@ public class GameEngine {
 		for (int row = 0; row < board.length; row++)
 		{
 			for (int column = 0; column < board[0].length; column++)
-				count += (board[row][column] == icon) ? 1 : 0;
+			{
+				if ( !(board[row][column] == icon) )
+					count += 0;
+				else
+					count++;
+			}
 		
-			if (count == 3)
+			if ( count == 3 )
 				return true;
 			else
 				count = 0;
@@ -86,9 +93,14 @@ public class GameEngine {
 		for (int column = 0; column < board.length; column++)
 		{
 			for (int row = 0; row < board[0].length; row++)
-				count += (board[row][column] == icon) ? 1 : 0;
+			{
+				if ( !(board[row][column] == icon) )
+					count += 0;
+				else
+					count++;
+			}
 		
-			if (count == 3)
+			if ( count == 3 )
 				return true;
 			else
 				count = 0;
@@ -109,10 +121,10 @@ public class GameEngine {
 		count += (board[1][1] == icon) ? 1 : 0;
 		count += (board[2][2] == icon) ? 1 : 0;
 		
-		if ( count == 3 )
-			return true;
-		else
+		if ( !(count == 3) )
 			count = 0;
+		else
+			return true;
 		
 		//check
 		//   #
@@ -122,10 +134,10 @@ public class GameEngine {
 		count += (board[1][1] == icon) ? 1 : 0;
 		count += (board[2][0] == icon) ? 1 : 0;
 
-		if ( count == 3 )
-			return true;
-		else
+		if ( !(count == 3) )
 			return false;
+		else
+			return true;
 	}
 	
 	public boolean isWin(char icon){
@@ -136,6 +148,27 @@ public class GameEngine {
 	}
 	
 	public boolean isDraw(){
+		
+		//check for empty spots on the board
+		for(int i = 0; i < board.length; i++)
+			for(int j = 0; j < board[0].length; j++)
+			{
+				if( board[i][j] == '_' )
+					return false;
+			}
+		
+		if ( isWin('X') || isWin('O') )
+			return false;
+		else
+			return true;
+	}
+	
+	public boolean isGameOver(){
+		
+		if ( isWin('X') || isWin('O') )
+			return true;
+		
+		//check for empty spots on the board
 		for(int i = 0; i < board.length; i++)
 			for(int j = 0; j < board[0].length; j++)
 			{

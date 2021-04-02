@@ -1,10 +1,26 @@
 # Tic-Tac-Toe
 
-ASCII style Tic-Tac-Toe playable through CLI.
+Tic-Tac-Toe playable through CLI or GUI!
 
-How to run manual player vs player mode (Default):
+How to run (CLI):
 - Compile *CLIDemo.java*, *GameEngine.java*, *AI.java*
-- Run *CLIDemo*
+- Run
+...
+java CLIDemo
+...
 
-How to run player vs AI mode:
- - Run *CLIDemo AI*
+Select AI (default normal difficulty):
+...
+java CLIDemo AI
+...
+
+Select AI hard difficulty:
+...
+java CLIDemo hard
+...
+
+How to run (GUI):
+...
+java GUIDemo
+...
+or execute TicTacToe.jar

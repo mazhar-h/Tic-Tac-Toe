@@ -5,7 +5,7 @@
 *
 *Date: 03/22/2021
 *@author  Mazhar Hossain
-*@version 0.0.18
+*@version 0.0.50
 */
 import java.util.Random;
 
@@ -42,7 +42,7 @@ public class AI {
 	private boolean isTerminal(GameEngine board){
 		
 		//check if winning or draw state
-		if ( board.isWin(minIcon) || board.isWin(maxIcon) || board.isDraw() )
+		if ( board.isGameOver() )
 			return true;
 		else
 			return false;
@@ -58,7 +58,7 @@ public class AI {
 		
 		if ( board.isWin(maxIcon) )
 			return 1;
-		else if (board.isDraw())
+		else if ( board.isDraw() )
 			return 0;
 		else
 			return -1;
@@ -69,7 +69,7 @@ public class AI {
 		if ( depth == 0 || isTerminal(board) )
 			return getHeuristicValue(board);
 		
-		if (maximizingPlayer){
+		if ( maximizingPlayer ){
 			int value = -999;
 			
 			for(int row = 0; row < 3; row++)
@@ -108,6 +108,10 @@ public class AI {
 		int[] bestMove = new int[2];
 		int value = -999;
 		
+		/*
+		 * for each possible move available
+		 * find the best move to out-play the minimizing player
+		 */
 		for(int row = 0; row < 3; row++)
 			for(int column = 0; column < 3; column++)
 			{

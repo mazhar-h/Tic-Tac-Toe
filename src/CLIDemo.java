@@ -1,25 +1,25 @@
 /**
-*Tic-Tac-Toe Game
+*Tic-Tac-Toe Game (CLI)
 *
 *Description: Playable Tic-Tac-Toe on CLI. Player vs player mode 
 * and player vs AI mode. X goes first. O goes second.
 *
 *Date: 03/22/2021
 *@author  Mazhar Hossain
-*@version 0.0.18
+*@version 0.0.50
 */
 import java.util.Scanner;
 
 public class CLIDemo {
 	
-	private static final char PLAYER1 = 'X';
-	private static final char PLAYER2 = 'O';
+	private static final char PLAYER_X = 'X';
+	private static final char PLAYER_O = 'O';
 	private static GameEngine game;
-	private static Scanner keyboard;//player input
-	private static AI ai;			//AI input
-	private static int turn = 1;	//current turn
-	private static int player;		//current player
-	private static char icon;		//current icon
+	private static Scanner keyboard;	//player input
+	private static AI ai;				//AI input
+	private static boolean normalMode;	//AI difficulty
+	private static int turn = 1;		//current turn
+	private static char icon;			//current icon
 	
 	public static void main(String[] args){
 		game = new GameEngine();
@@ -29,58 +29,65 @@ public class CLIDemo {
 		//AI check
 		if ( args.length > 0 && args[0].toUpperCase().equals("AI") )
 		{
-			ai = new AI(PLAYER2, PLAYER1);
+			ai = new AI(PLAYER_O, PLAYER_X);
 			enableAI = true;
+			
+			if ( args.length > 1 && args[1].toLowerCase().equals("hard") )
+				normalMode = false;
+			else
+				normalMode = true;
+			
 		}
-		
+				
 		System.out.println("Welcome to Tic-Tac-Toe!!\n");
 			
 		while ( turn < 10 )
 		{				
-			//determine current player
-			if ( isOddTurn() )
-			{
-				player = 1;
-				icon = PLAYER1;
-			}
-			else{
-				player = 2;
-				icon = PLAYER2;
-			}
+			//determine current player (X or O)
+			icon = ( isOddTurn() ) ? PLAYER_X : PLAYER_O;
 			
-			//if AI else player input
-			if ( enableAI && !isOddTurn() )
-			{
-				game = aiMove();
-			}else{
-				game = playerMove();
-			}
+			System.out.printf("Turn %d\n", turn);
+			game.printBoard();
+		
+			//determine if AI or player move
+			game = ( enableAI && !isOddTurn() ) ? aiMove() : playerMove();
+
+			game.printBoard();
 			
-			checkGameState();
+			checkGameOver();
 			
-			turn++;	//increment game state
+			//increment game state
+			turn++;
 			
 		}//end while
 		
 		keyboard.close();
 	}
 	
+	/*
+	 * @return Boolean value if the current turn state is odd or even.
+	 */
 	private static boolean isOddTurn(){
 		return (turn % 2 == 0) ? false : true;
 	}
-	
+		
+	/*
+	 * Prints out a prompt and stores an integer value from input.
+	 * 
+	 * @return Integer value for either a row or column of a move.
+	 */
 	private static int promptEnterInteger(String valueName){
 		String valueStr;
 		int valueInt;
 		
 		//get value
-		System.out.printf("Enter %s: ", valueName);
+		System.out.printf("Enter %s[1-3]: ", valueName);
 		valueStr = keyboard.next();
 		
 		//check if number
 		while( !valueStr.matches("\\d") )
 		{
-			System.out.printf("Invalid value! Re-Enter %s: ", valueName);
+			System.out.printf("Invalid! Re-Enter %s[1-3]: ", valueName);
 			valueStr = keyboard.next();
 		}
 		
@@ -90,19 +97,25 @@ public class CLIDemo {
 		//check if in range
 		while( valueInt < 1 || valueInt > 3 )
 		{
-			System.out.printf("Invalid value! Re-Enter %s: ", valueName);
+			System.out.printf("Invalid! Re-Enter %s[1-3]: ", valueName);
 			valueInt = keyboard.nextInt();
 		}
 		
 		return valueInt;
 	}
-			
+	
+	/*
+	 * Prompts the player to enter the row and column of a move.
+	 * 
+	 * @return Integer array of size 2 containing the player's move coordinate.
+	 * Index 0 is row and index 1 is column;
+	 */
 	private static int[] promptPlayerMove(){
 		
 		int[] input = new int[2];
 		
 		//display current player
-		System.out.printf("Player %d\n", player);
+		System.out.printf("Player %c\n", icon);
 		
 		input[0] = promptEnterInteger("row");
 		input[1] = promptEnterInteger("column");
@@ -114,7 +127,10 @@ public class CLIDemo {
 		
 		return input;
 	}
-		
+	
+	/*
+	 * Prompts the player if they want to play again.
+	 */
 	private static boolean promptNewGame(){
 				
 		System.out.print("Play again? (y/n): ");
@@ -127,29 +143,42 @@ public class CLIDemo {
 			return false;
 	}
 	
+	/*
+	 * AI makes its best move.
+	 * 
+	 * @return GameEngine object containing the AI's move.
+	 */
 	private static GameEngine aiMove(){
 		
-		//32% chance to choose random move
-		//68% chance to choose optimal move
-		if ( Math.random() < .32 )
+		//.32 normal mode
+		//0 hard mode
+		double p = ( normalMode ) ? .32 : 0;
+		int[] moveCoordinate;
+		
+		if ( Math.random() < p )
 		{
-			int[] randomMoveCoordinate = ai.randomMove(game);
-			game.makeMove(icon, randomMoveCoordinate[0], randomMoveCoordinate[1]);
-		}else
-		{
-			int[] aiMoveCoordinate = ai.getBestMove(game, 9-turn);
-			game.makeMove(icon, aiMoveCoordinate[0], aiMoveCoordinate[1]);
+			moveCoordinate = ai.randomMove(game);
 		}
+		else
+		{
+			moveCoordinate = ai.getBestMove(game, 9-turn);	
+		}
+		
+		game.makeMove( icon, moveCoordinate[0], moveCoordinate[1] );
+		
 		return game;
 	}
 	
+	/*
+	 * Prompts the player to make a move.
+	 * 
+	 * @return GameEngine object containing the added player's move.
+	 */
 	private static GameEngine playerMove(){
 		
 		int[] moveCoordinate;	//position of move
 		boolean validMove;		//if valid move
 				
-		System.out.printf("Turn %d\n", turn);
-		game.printBoard();
 		
 		//get user input, make move, and check if valid move
 		moveCoordinate = promptPlayerMove();
@@ -169,28 +198,23 @@ public class CLIDemo {
 		return game;
 	}
 	
-	private static void checkGameState(){
-		boolean win;
+	/*
+	 * Checks for a win or draw and resets the game state accordingly.
+	 */
+	private static void checkGameOver(){
 		
-		//check if winning or draw game state
-		if ( win = game.isWin(icon) )
-		{
-			game.printBoard();
-			System.out.printf("Player %d Wins!!!\n\n", player);
-		}
-		else if ( turn == 9 )
-		{
-			game.printBoard();
+		if ( game.isWin(icon) )
+			System.out.printf("Player %c Wins!!!\n\n", icon);
+
+		else if ( game.isDraw() )
 			System.out.printf("Draw!!!\n\n");
-		}
 		
-		//check if game over
-		if ( win || turn == 9 )
+		if ( game.isGameOver() )
 		{
-			//create new game
-			if (promptNewGame())
+			if ( promptNewGame() )
 			{
-				turn = 1;
+				//create new game
+				turn = 0;
 				game = new GameEngine();
 			}
 			else
