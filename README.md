@@ -8,7 +8,7 @@ javac CLIDemo.java AI.java GameEngine.java
 java CLIDemo
 ```
 
-Run AI mode (normal difficulty) and AI mode hard difficulty:
+How to run (CLI) AI mode normal difficulty (default) and AI mode hard difficulty:
 ```
 java CLIDemo AI
 java CLIDemo AI hard
