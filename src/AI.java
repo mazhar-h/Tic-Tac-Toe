@@ -5,7 +5,7 @@
 *
 *Date: 03/22/2021
 *@author  Mazhar Hossain
-*@version 0.0.50
+*@version 0.0.52
 */
 import java.util.Random;
 
@@ -20,6 +20,12 @@ public class AI {
 		this.minIcon = minimizingPlayer;
 	}
 	
+	/*
+	 * Determines placement at a random cell on the board.
+	 * 
+	 * @return Integer array where index 0 is the row value and
+	 *  index 1 is the column value.
+	 */
 	public int[] randomMove(GameEngine board){
 		
 		int[] coordinate = new int[2];
@@ -39,6 +45,11 @@ public class AI {
 		return coordinate;
 	}
 	
+	/*
+	 * Checks if current game state is a terminal state (game over)
+	 * 
+	 * @return Boolean value is true if terminal else false if not.
+	 */
 	private boolean isTerminal(GameEngine board){
 		
 		//check if winning or draw state
@@ -48,6 +59,9 @@ public class AI {
 			return false;
 	}
 	
+	/* 
+	 * @return Integer value for the heuristic score.
+	 */
 	private int getHeuristicValue(GameEngine board){
 		
 		/*
@@ -64,6 +78,12 @@ public class AI {
 			return -1;
 	}
 	
+	/*
+	 * Determines whether a successor game state is an optimal choice dictated
+	 * by the heuristic score.
+	 * 
+	 * @return Integer value of the heuristic score.
+	 */
 	private int minimax(GameEngine board, int depth, boolean maximizingPlayer){
 		
 		if ( depth == 0 || isTerminal(board) )
@@ -74,7 +94,8 @@ public class AI {
 			
 			for(int row = 0; row < 3; row++)
 				for(int column = 0; column < 3; column++)
-				{
+				{	
+					//make next available move
 					if(board.isEmpty(row, column))
 					{
 						char[][] b = board.getBoard();
@@ -91,6 +112,7 @@ public class AI {
 			for(int row = 0; row < 3; row++)
 				for(int column = 0; column < 3; column++)
 				{
+					//make next available move
 					if(board.isEmpty(row, column))
 					{
 						char[][] b = board.getBoard();
@@ -103,6 +125,12 @@ public class AI {
 		}
 	}
 	
+	/*
+	 * Determines an optimal move given a current game state.
+	 * 
+	 * @return Integer array containing the move coordinate where
+	 * index 0 is the row value and index 1 is the column value.
+	 */
 	public int[] getBestMove(GameEngine board, int turnsLeft){
 		
 		int[] bestMove = new int[2];

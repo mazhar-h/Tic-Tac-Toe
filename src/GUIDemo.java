@@ -6,7 +6,7 @@
 *
 *Date: 04/01/2021
 *@author  Mazhar Hossain
-*@version 0.0.32
+*@version 0.0.34
 */
 
 import java.awt.BorderLayout;
@@ -36,7 +36,7 @@ public class GUIDemo implements ActionListener{
 	private GameEngine game;
 	private final char PLAYER_X = 'X';
 	private final char PLAYER_O = 'O';
-	private int turn = 1; 				//current turn
+	private int turn = 1;				//current turn state
 	private AI ai;						//AI input
 	private boolean normalMode;			//AI difficulty
 	private boolean enableAI = false;	//AI mode
@@ -94,7 +94,7 @@ public class GUIDemo implements ActionListener{
 	}
 	
 	/*
-	 * @return The current player icon. X or O.
+	 * @return Char value of the current player icon. X or O.
 	 */
 	private char getCurrentIcon(){
 		return ( isOddTurn() ) ? PLAYER_X : PLAYER_O;
@@ -104,7 +104,7 @@ public class GUIDemo implements ActionListener{
 	 * AI determines its best move.
 	 * 
 	 * @return Integer array of size 2 containing the AI's move coordinate.
-	 * Index 0 is row and index 1 is column;
+	 * Index 0 is the row value and index 1 is the column value.
 	 */
 	private int[] aiMove(){
 		
@@ -114,13 +114,9 @@ public class GUIDemo implements ActionListener{
 		int[] moveCoordinate;
 		
 		if ( Math.random() < difficultyProbability )
-		{
 			moveCoordinate = ai.randomMove(game);
-		}
 		else
-		{
 			moveCoordinate = ai.getBestMove(game, 9-turn);	
-		}
 		
 		game.makeMove( getCurrentIcon(), moveCoordinate[0], moveCoordinate[1] );
 		

@@ -6,7 +6,7 @@
 *
 *Date: 03/22/2021
 *@author  Mazhar Hossain
-*@version 0.0.50
+*@version 0.0.52
 */
 import java.util.Scanner;
 
@@ -47,12 +47,12 @@ public class CLIDemo {
 			icon = ( isOddTurn() ) ? PLAYER_X : PLAYER_O;
 			
 			System.out.printf("Turn %d\n", turn);
-			game.printBoard();
+			printBoard();
 		
 			//determine if AI or player move
 			game = ( enableAI && !isOddTurn() ) ? aiMove() : playerMove();
 
-			game.printBoard();
+			printBoard();
 			
 			checkGameOver();
 			
@@ -108,7 +108,7 @@ public class CLIDemo {
 	 * Prompts the player to enter the row and column of a move.
 	 * 
 	 * @return Integer array of size 2 containing the player's move coordinate.
-	 * Index 0 is row and index 1 is column;
+	 * Index 0 is the row value and index 1 is the column value.
 	 */
 	private static int[] promptPlayerMove(){
 		
@@ -156,13 +156,9 @@ public class CLIDemo {
 		int[] moveCoordinate;
 		
 		if ( Math.random() < p )
-		{
 			moveCoordinate = ai.randomMove(game);
-		}
 		else
-		{
-			moveCoordinate = ai.getBestMove(game, 9-turn);	
-		}
+			moveCoordinate = ai.getBestMove(game, 9-turn);
 		
 		game.makeMove( icon, moveCoordinate[0], moveCoordinate[1] );
 		
@@ -188,7 +184,7 @@ public class CLIDemo {
 		while ( !validMove )
 		{
 			System.out.printf("Turn %d\n", turn);
-			game.printBoard();
+			printBoard();
 			
 			System.out.printf("That position is occupied!\n\n");
 			moveCoordinate = promptPlayerMove();
@@ -224,6 +220,23 @@ public class CLIDemo {
 				System.out.println("GG and Goodbye!!");
 			}
 		}
+	}
+	
+	/*
+	 * Prints out the current state of the board.
+	 */
+	public static void printBoard(){
+		
+		char[][] board = game.getBoard();
+		
+		for(int row = 0; row < board.length; row++)
+		{
+			for(int column = 0; column < board[0].length; column++)
+				System.out.printf("%c ", board[row][column]);
+			
+			System.out.println();
+		}
+		System.out.println();
 	}
 	
 }

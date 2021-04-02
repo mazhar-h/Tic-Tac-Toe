@@ -5,10 +5,8 @@
 *
 *Date: 03/22/2021
 *@author  Mazhar Hossain
-*@version 0.0.50
+*@version 0.0.52
 */
-import java.util.List;
-import java.util.LinkedList;
 
 public class GameEngine {
 	
@@ -33,6 +31,9 @@ public class GameEngine {
 		this.board = copy;
 	}
 	
+	/*
+	 * @return Char array of the current game board.
+	 */
 	public char[][] getBoard(){
 		
 		char[][] copy = new char[3][3];	//deep copy board
@@ -43,6 +44,11 @@ public class GameEngine {
 		return copy;
 	}
 	
+	/*
+	 * Checks the cell state specified by row and column on the board.
+	 * 
+	 * @return Boolean value is true if empty else false if not empty.
+	 */
 	public boolean isEmpty(int row, int column){
 		
 		if (board[row][column] == PLACEHOLDER)
@@ -51,6 +57,10 @@ public class GameEngine {
 			return false;
 	}
 	
+	/* Marks the cell at the specified row and column.
+	 * 
+	 * @return Boolean value is false if cell is occupied.
+	 */
 	public boolean makeMove(char icon, int row, int column){
 		
 		if (!isEmpty(row, column))
@@ -61,6 +71,11 @@ public class GameEngine {
 		return true;
 	}
 	
+	/*
+	 * Checks for a winning state at horizontal positions.
+	 * 
+	 * @return Boolean value is true if winning state else false if not.
+	 */
 	private boolean checkHorizontals(char icon){
 		
 		int count = 0;
@@ -85,6 +100,11 @@ public class GameEngine {
 		return false;
 	}
 	
+	/*
+	 * Checks for a winning state at vertical positions.
+	 * 
+	 * @return Boolean value is true if winning state else false if not.
+	 */
 	private boolean checkVerticals(char icon){	
 		
 		int count = 0;
@@ -109,6 +129,11 @@ public class GameEngine {
 		return false;
 	}
 	
+	/*
+	 * Checks for a winning state diagonal positions.
+	 * 
+	 * @return Boolean value is true if winning state else false if not.
+	 */
 	private boolean checkDiagonals(char icon){
 		
 		int count = 0;
@@ -140,6 +165,11 @@ public class GameEngine {
 			return true;
 	}
 	
+	/*
+	 * Checks for a winning game state.
+	 * 
+	 * @return Boolean value is true if winning state else false if note.
+	 */
 	public boolean isWin(char icon){
 		if ( checkHorizontals(icon) || checkVerticals(icon) || checkDiagonals(icon) )
 			return true;
@@ -147,6 +177,11 @@ public class GameEngine {
 			return false;
 	}
 	
+	/*
+	 * Checks for a draw games state.
+	 * 
+	 * @return Boolean value is true if draw else false if not.
+	 */
 	public boolean isDraw(){
 		
 		//check for empty spots on the board
@@ -163,6 +198,11 @@ public class GameEngine {
 			return true;
 	}
 	
+	/*
+	 * Checks if the game is over determined by a win or draw state.
+	 * 
+	 * @return Boolean value is true game is over else false if not.
+	 */
 	public boolean isGameOver(){
 		
 		if ( isWin('X') || isWin('O') )
@@ -177,17 +217,5 @@ public class GameEngine {
 			}
 		
 		return true;
-	}
-	
-	public void printBoard(){
-		for(int row = 0; row < board.length; row++)
-		{
-			for(int column = 0; column < board[0].length; column++)
-			{
-				System.out.printf("%c ", board[row][column]);
-			}
-			System.out.println();
-		}
-		System.out.println();
 	}
 }
