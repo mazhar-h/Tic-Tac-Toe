@@ -3,7 +3,7 @@
 Tic-Tac-Toe playable through CLI or GUI!
 
 How to run (CLI):
-- Compile *CLIDemo.java*, *GameEngine.java*, *AI.java*
+- Compile *GUIDemo.java*, *CLIDemo.java*, *GameEngine.java*, *AI.java*
 - Run
 ```
 java CLIDemo
