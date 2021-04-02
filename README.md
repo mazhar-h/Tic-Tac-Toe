@@ -16,7 +16,7 @@ java CLIDemo AI
 
 Select AI hard difficulty:
 ```
-java CLIDemo hard
+java CLIDemo AI hard
 ```
 
 How to run (GUI):
