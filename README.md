@@ -2,25 +2,21 @@
 
 Tic-Tac-Toe playable through CLI or GUI!
 
-How to run (CLI):
-- Compile *GUIDemo.java*, *CLIDemo.java*, *GameEngine.java*, *AI.java*
-- Run
+How to run CLI version:
 ```
+javac CLIDemo.java AI.java GameEngine.java
 java CLIDemo
 ```
 
-Select AI (default normal difficulty):
+Run AI mode (normal difficulty) and AI mode hard difficulty:
 ```
 java CLIDemo AI
-```
-
-Select AI hard difficulty:
-```
 java CLIDemo AI hard
 ```
 
-How to run (GUI):
+How to run GUI version:
 ```
+javac GUIDemo.java AI.java GameEngine.java
 java GUIDemo
 ```
 or execute TicTacToe.jar
