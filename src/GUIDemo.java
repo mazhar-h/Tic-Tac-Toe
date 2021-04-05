@@ -35,8 +35,8 @@ public class GUIDemo implements ActionListener{
 	private GameEngine game;
 	private final char PLAYER_1 = 'X';
 	private final char PLAYER_2 = 'O';
-	private AI ai;						//AI input
-	private boolean normalMode;			//AI difficulty
+	private AI ai;	//AI input
+	private boolean normalMode;		//AI difficulty
 	private boolean enableAI = false;	//AI mode
 
 	private JFrame frame = new JFrame();
