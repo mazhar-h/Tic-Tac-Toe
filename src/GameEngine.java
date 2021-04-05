@@ -5,34 +5,143 @@
 *
 *Date: 03/22/2021
 *@author  Mazhar Hossain
-*@version 0.0.52
+*@version 0.0.56
 */
 
 public class GameEngine {
 	
+	private static final char PLAYER_1 = 'X';
+	private static final char PLAYER_2 = 'O';
 	private static final char PLACEHOLDER = '_';
-	private char[][] board = new char[3][3];
+	private char[][] board = new char[3][3];	//game state
+	private int turn;							//turn state
 	
+	/*
+	 * Constructor
+	 */
 	public GameEngine(){
 		
 		//fill board with PLACEHOLDER
 		for(int row = 0; row < board.length; row++)
 			for(int column = 0; column < board[0].length; column++)
 				board[row][column] = PLACEHOLDER;
+
+		turn = 1;
+
 	}
 	
-	public GameEngine(char[][] board){
-		
+	/*
+	 * Constructor
+	 * 
+	 * @param	board	game board of a game.
+	 * @param	turn	the turn state.
+	 */
+	public GameEngine(char[][] board, int turn){
+				
 		char[][] copy = new char[3][3];	//deep copy board
 		
 		for(int row = 0; row < board.length; row++)
 				System.arraycopy(board[row], 0, copy[row], 0, board.length);
 		
 		this.board = copy;
+		this.turn = turn;
 	}
 	
 	/*
-	 * @return Char array of the current game board.
+	 * Advances the turn state.
+	 * @return the advanced turn state.
+	 */
+	public int advanceTurn(){
+		return ++turn;
+	}
+	
+	/*
+	 * Checks for a horizontal winning game state.
+	 * 
+	 * @param	player	the icon of the current player.
+	 * @return		is true if winning state else false if not.
+	 */
+	private boolean checkHorizontals(char player){
+				
+		//check every possible horizontal win condition
+		for (int row = 0; row < board.length; row++)
+		{
+			int count = 0;
+
+			for (int column = 0; column < board[0].length; column++)
+				if ( board[row][column] == player )
+					count++;
+		
+			if ( count == 3 )
+				return true;
+		}
+		
+		return false;
+	}
+	
+	/*
+	 * Checks for a vertical winning game state.
+	 * 
+	 * @param	player	the icon of the current player.
+	 * @return		is true if winning state else false if not.
+	 */
+	private boolean checkVerticals(char player){	
+				
+		//check every possible vertical win condition
+		for (int column = 0; column < board.length; column++)
+		{
+			int count = 0;
+
+			for (int row = 0; row < board[0].length; row++)
+				if ( board[row][column] == player )
+					count++;
+		
+			if ( count == 3 )
+				return true;
+		}
+		
+		return false;
+	}
+	
+	/*
+	 * Checks for a diagonal winning game state.
+	 * 
+	 * @param	player	the icon of the current player.
+	 * @return		is true if winning state else false if not.
+	 */
+	private boolean checkDiagonals(char player){
+		
+		int count = 0;
+
+		//check
+		// #
+		//  #
+		//   #
+		count += (board[0][0] == player) ? 1 : 0;
+		count += (board[1][1] == player) ? 1 : 0;
+		count += (board[2][2] == player) ? 1 : 0;
+		
+		if ( count == 3 )
+			return true;
+		else
+			count = 0;
+	
+		//check
+		//   #
+		//  #
+		// #
+		count += (board[0][2] == player) ? 1 : 0;
+		count += (board[1][1] == player) ? 1 : 0;
+		count += (board[2][0] == player) ? 1 : 0;
+
+		if ( count == 3 )
+			return true;
+		else
+			return false;
+	}
+	
+	/*
+	 * @return	the current game board.
 	 */
 	public char[][] getBoard(){
 		
@@ -45,142 +154,24 @@ public class GameEngine {
 	}
 	
 	/*
-	 * Checks the cell state specified by row and column on the board.
-	 * 
-	 * @return Boolean value is true if empty else false if not empty.
+	 * @return	current player icon. X or O.
 	 */
-	public boolean isEmpty(int row, int column){
-		
-		if (board[row][column] == PLACEHOLDER)
-			return true;
-		else
-			return false;
-	}
-	
-	/* Marks the cell at the specified row and column.
-	 * 
-	 * @return Boolean value is false if cell is occupied.
-	 */
-	public boolean makeMove(char icon, int row, int column){
-		
-		if (!isEmpty(row, column))
-			return false;
-		else
-			board[row][column] = icon;
-		
-		return true;
+	public char getCurrentPlayer(){
+		 // Odd turn goes first, even turn goes second
+		return ( turn % 2 == 0 ) ? PLAYER_2 : PLAYER_1;
 	}
 	
 	/*
-	 * Checks for a winning state at horizontal positions.
-	 * 
-	 * @return Boolean value is true if winning state else false if not.
+	 *@return	the current turn state.
 	 */
-	private boolean checkHorizontals(char icon){
-		
-		int count = 0;
-		
-		//check every possible horizontal win condition
-		for (int row = 0; row < board.length; row++)
-		{
-			for (int column = 0; column < board[0].length; column++)
-			{
-				if ( !(board[row][column] == icon) )
-					count += 0;
-				else
-					count++;
-			}
-		
-			if ( count == 3 )
-				return true;
-			else
-				count = 0;
-		}
-		
-		return false;
-	}
-	
-	/*
-	 * Checks for a winning state at vertical positions.
-	 * 
-	 * @return Boolean value is true if winning state else false if not.
-	 */
-	private boolean checkVerticals(char icon){	
-		
-		int count = 0;
-		
-		//check every possible vertical win condition
-		for (int column = 0; column < board.length; column++)
-		{
-			for (int row = 0; row < board[0].length; row++)
-			{
-				if ( !(board[row][column] == icon) )
-					count += 0;
-				else
-					count++;
-			}
-		
-			if ( count == 3 )
-				return true;
-			else
-				count = 0;
-		}
-		
-		return false;
-	}
-	
-	/*
-	 * Checks for a winning state diagonal positions.
-	 * 
-	 * @return Boolean value is true if winning state else false if not.
-	 */
-	private boolean checkDiagonals(char icon){
-		
-		int count = 0;
-
-		//check
-		// #
-		//  #
-		//   #
-		count += (board[0][0] == icon) ? 1 : 0;
-		count += (board[1][1] == icon) ? 1 : 0;
-		count += (board[2][2] == icon) ? 1 : 0;
-		
-		if ( !(count == 3) )
-			count = 0;
-		else
-			return true;
-		
-		//check
-		//   #
-		//  #
-		// #
-		count += (board[0][2] == icon) ? 1 : 0;
-		count += (board[1][1] == icon) ? 1 : 0;
-		count += (board[2][0] == icon) ? 1 : 0;
-
-		if ( !(count == 3) )
-			return false;
-		else
-			return true;
-	}
-	
-	/*
-	 * Checks for a winning game state.
-	 * 
-	 * @return Boolean value is true if winning state else false if note.
-	 */
-	public boolean isWin(char icon){
-		if ( checkHorizontals(icon) || checkVerticals(icon) || checkDiagonals(icon) )
-			return true;
-		else
-			return false;
+	public int getTurn(){
+		return turn;
 	}
 	
 	/*
 	 * Checks for a draw games state.
 	 * 
-	 * @return Boolean value is true if draw else false if not.
+	 * @return	is true if draw else false if not.
 	 */
 	public boolean isDraw(){
 		
@@ -199,9 +190,24 @@ public class GameEngine {
 	}
 	
 	/*
-	 * Checks if the game is over determined by a win or draw state.
+	 * Checks if the cell at the specified row and column is empty.
 	 * 
-	 * @return Boolean value is true game is over else false if not.
+	 * @param	row	row value on the board [0-3].
+	 * @param	column	column value on the board [0-3].
+	 * @return	is true if empty else false if not empty.
+	 */
+	public boolean isEmpty(int row, int column){
+		
+		if (board[row][column] == PLACEHOLDER)
+			return true;
+		else
+			return false;
+	}
+	
+	/*
+	 * Checks if the game is over determined by a win or draw game state.
+	 * 
+	 * @return	is true game is over else false if not.
 	 */
 	public boolean isGameOver(){
 		
@@ -215,6 +221,44 @@ public class GameEngine {
 				if( board[i][j] == '_' )
 					return false;
 			}
+		
+		return true;
+	}
+	
+	/*
+	 * Checks for a winning game state.
+	 * 
+	 * @param	player	the icon of the current player.
+	 * @return	is true if winning state else false if note.
+	 */
+	public boolean isWin(char player){
+		if ( checkHorizontals(player) || checkVerticals(player) || checkDiagonals(player) )
+			return true;
+		else
+			return false;
+	}
+	
+	/*
+	 * Checks for a winning game state for the current player.
+	 * 
+	 * @return	is true if winning state else false if note.
+	 */
+	public boolean isWin(){
+		return isWin( getCurrentPlayer() );
+	}
+	
+	/* Marks the cell at the specified row and column.
+	 * 
+	 * @param	row	row value on the board [0-3].
+	 * @param	column	column value on the board [0-3].
+	 * @return	is false if cell is occupied.
+	 */
+	public boolean makeMove(int row, int column){
+		
+		if (!isEmpty(row, column))
+			return false;
+		else
+			board[row][column] = getCurrentPlayer();
 		
 		return true;
 	}

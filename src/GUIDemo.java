@@ -6,7 +6,7 @@
 *
 *Date: 04/01/2021
 *@author  Mazhar Hossain
-*@version 0.0.34
+*@version 0.0.56
 */
 
 import java.awt.BorderLayout;
@@ -18,7 +18,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.util.Scanner;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -34,20 +33,22 @@ public class GUIDemo implements ActionListener{
 	}
 	
 	private GameEngine game;
-	private final char PLAYER_X = 'X';
-	private final char PLAYER_O = 'O';
-	private int turn = 1;				//current turn state
+	private final char PLAYER_1 = 'X';
+	private final char PLAYER_2 = 'O';
 	private AI ai;						//AI input
 	private boolean normalMode;			//AI difficulty
 	private boolean enableAI = false;	//AI mode
 
 	private JFrame frame = new JFrame();
-	private JPanel boardPanel = new JPanel();
-	private CellButton[][] boardCells = new CellButton[3][3];
+	private JPanel boardPanel = new JPanel();	//holds the board cells
+	private CellButton[][] boardCells = new CellButton[3][3];	//holds a marked move
 	
+	/*
+	 * Constructor. Creates the GUI.
+	 */
 	public GUIDemo(){
 		game = new GameEngine();
-		selectModePrompt();
+		promptSelectMode();
 		
 		//setup main frame
 		frame.setTitle("Tic-Tac-Toe");
@@ -87,26 +88,86 @@ public class GUIDemo implements ActionListener{
 	}
 	
 	/*
-	 * @return Boolean value if the current turn state is odd or even.
+	 * Controls the interaction of a cell and core game logic.
+	 * 
+	 * (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
-	private boolean isOddTurn(){
-		return (turn % 2 == 0) ? false : true;
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		for (int row = 0; row < 3; row++)
+			for (int column = 0; column < 3; column++){
+				
+				CellButton currentCell = boardCells[row][column];
+				
+				if ( e.getSource() == currentCell && !currentCell.isClicked() )
+				{
+					//player move
+					markButton(currentCell);
+					game.makeMove( row, column );
+					checkGameOver();
+					
+					//AI makes move after
+					if ( enableAI 
+							&& game.getCurrentPlayer() == PLAYER_2 
+							&& game.getTurn() < 10 )
+					{
+						int[] moveCoordinate = getAIMove();
+						int x = moveCoordinate[0];
+						int y = moveCoordinate[1];
+						
+						currentCell = boardCells[x][y];
+						markButton(currentCell);
+						game.makeMove( x, y );
+						checkGameOver();
+					}
+				}
+			}//end for
+	}	
+	
+	/*
+	 * Checks for a win or draw and resets the game state accordingly.
+	 */
+	private void checkGameOver(){
+		
+		String messageWin = String.valueOf( game.getCurrentPlayer() ) + " Wins!";
+		String messageDraw = "Draw!!";
+		
+		if ( game.isWin() )
+		{
+			JOptionPane.showMessageDialog(frame, messageWin);
+			disableCells();
+			promptPlayAgain();
+			return;
+		}
+		else if ( game.isDraw() )
+		{
+			JOptionPane.showMessageDialog(frame, messageDraw);
+			disableCells();
+			promptPlayAgain();
+			return;
+		}
+		game.advanceTurn();
+
 	}
 	
 	/*
-	 * @return Char value of the current player icon. X or O.
+	 * Disables each cell so that they cannot be interacted with.
 	 */
-	private char getCurrentIcon(){
-		return ( isOddTurn() ) ? PLAYER_X : PLAYER_O;
+	private void disableCells(){
+		
+		for(int row = 0; row < 3; row++)
+			for(int column = 0; column < 3; column++)
+				boardCells[row][column].setEnabled(false);
 	}
 	
 	/*
 	 * AI determines its best move.
 	 * 
-	 * @return Integer array of size 2 containing the AI's move coordinate.
-	 * Index 0 is the row value and index 1 is the column value.
+	 * @return	contains the AI's move coordinate. Index 0 is the row value 
+	 * 	and index 1 is the column value.
 	 */
-	private int[] aiMove(){
+	private int[] getAIMove(){
 		
 		//.32 normal mode
 		//0 hard mode
@@ -116,18 +177,53 @@ public class GUIDemo implements ActionListener{
 		if ( Math.random() < difficultyProbability )
 			moveCoordinate = ai.randomMove(game);
 		else
-			moveCoordinate = ai.getBestMove(game, 9-turn);	
-		
-		game.makeMove( getCurrentIcon(), moveCoordinate[0], moveCoordinate[1] );
-		
+			moveCoordinate = ai.getBestMove(game, 9-game.getTurn());	
+				
 		return moveCoordinate;
+	}
+	
+	/*
+	 * Marks a cell X or O
+	 */
+	private void markButton(CellButton c){
+		
+		if ( game.getCurrentPlayer() == PLAYER_1 )
+		{
+			c.setText( String.valueOf( PLAYER_1 ) );
+			c.setForeground(Color.RED);
+			c.setClicked(true);
+		}
+		else
+		{
+			c.setText( String.valueOf( PLAYER_2 ) );					
+			c.setForeground(Color.BLUE);
+			c.setClicked(true);
+		}
+	}
+	
+	/*
+	 * Resets the board and starts a new game state.
+	 */
+	private void newGame(){
+		
+		game = new GameEngine();
+
+		for(int row = 0; row < 3; row++)
+			for(int column = 0; column < 3; column++)
+			{
+				CellButton c = boardCells[row][column];
+				c.setText("");
+				c.setEnabled(true);
+				c.clicked = false;
+			}
 	}
 	
 	/*
 	 * Asks player to chose game mode
 	 * Player vs Player or Player vs AI
 	 */
-	private void selectModePrompt(){
+	private void promptSelectMode(){
+		
 		String message = "Select a game mode!!";
 		String title = "Welcome!";
 		String[] options = {"Player vs Player", "Player vs AI"};
@@ -147,7 +243,7 @@ public class GUIDemo implements ActionListener{
 			title = "AI Mode";
 			String[] optionsAI = {"Normal", "Hard"};
 			
-			ai = new AI(PLAYER_O, PLAYER_X);
+			ai = new AI(PLAYER_2, PLAYER_1);
 			enableAI = true;
 			
 			int aiPrompt = JOptionPane.showOptionDialog(frame,
@@ -168,33 +264,11 @@ public class GUIDemo implements ActionListener{
 			enableAI = false;
 	}
 	
-	private void disableCells(){
-		for(int row = 0; row < 3; row++)
-			for(int column = 0; column < 3; column++)
-				boardCells[row][column].setEnabled(false);
-	}
-	
-	/*
-	 * Resets the board
-	 */
-	private void newGame(){
-		for(int row = 0; row < 3; row++)
-			for(int column = 0; column < 3; column++)
-			{
-				CellButton c = boardCells[row][column];
-				c.setText("");
-				c.setEnabled(true);
-				c.clicked = false;
-				turn = 0;
-				game = new GameEngine();
-			}
-		selectModePrompt();
-	}
-	
 	/*
 	 * Asks the player whether they want to play again.
 	 */
-	private void playAgainPrompt(){
+	private void promptPlayAgain(){
+		
 		String message = "Would you like to play again?";
 		String title = "Game Over";		
 		int n = JOptionPane.showConfirmDialog(frame, 
@@ -203,78 +277,13 @@ public class GUIDemo implements ActionListener{
 				JOptionPane.YES_NO_OPTION);
 		
 		if ( n == 0 )
+		{
 			newGame();
+			promptSelectMode();
+
+		}
 		else
 			frame.dispatchEvent( new WindowEvent(frame, WindowEvent.WINDOW_CLOSING) );
-	}
-	
-	/*
-	 * Checks for a win or draw and resets the game state accordingly.
-	 */
-	private void checkGameOver(){
-		String messageWin = String.valueOf( getCurrentIcon() ) + " Wins!";
-		String messageDraw = "Draw!!";
-		
-		if ( game.isWin( getCurrentIcon() ) )
-		{
-			JOptionPane.showMessageDialog(frame, messageWin);
-			disableCells();
-			playAgainPrompt();
-		}
-		else if ( game.isDraw() )
-		{
-			JOptionPane.showMessageDialog(frame, messageDraw);
-			disableCells();
-			playAgainPrompt();
-		}
-	}
-	
-	/*
-	 * Marks a cell X or O
-	 */
-	private void markButton(CellButton c){
-		if ( isOddTurn() )
-		{
-			c.setText( String.valueOf(getCurrentIcon()) );
-			c.setForeground(Color.RED);
-			c.setClicked(true);
-		}
-		else
-		{
-			c.setText(String.valueOf( getCurrentIcon() ));					
-			c.setForeground(Color.BLUE);
-			c.setClicked(true);
-		}
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		for (int row = 0; row < 3; row++)
-			for (int column = 0; column < 3; column++){
-				
-				CellButton currentCell = boardCells[row][column];
-				
-				if ( e.getSource() == currentCell && !currentCell.isClicked() )
-				{
-					markButton(currentCell);
-					game.makeMove(getCurrentIcon(), row, column);
-					checkGameOver();
-					turn++;
-					
-					//AI makes move after
-					if ( enableAI && turn % 2 == 0 && turn < 10 )
-					{
-						int[] moveCoordinate = aiMove();
-						int x = moveCoordinate[0];
-						int y = moveCoordinate[1];
-						
-						currentCell = boardCells[x][y];
-						markButton(currentCell);
-						checkGameOver();
-						turn++;
-					}
-				}
-			}//end for
 	}
 	
 	class CellButton extends JButton {

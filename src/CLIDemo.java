@@ -6,30 +6,30 @@
 *
 *Date: 03/22/2021
 *@author  Mazhar Hossain
-*@version 0.0.52
+*@version 0.0.56
 */
 import java.util.Scanner;
 
 public class CLIDemo {
 	
-	private static final char PLAYER_X = 'X';
-	private static final char PLAYER_O = 'O';
+	private static final char PLAYER_1 = 'X';
+	private static final char PLAYER_2 = 'O';
 	private static GameEngine game;
 	private static Scanner keyboard;	//player input
 	private static AI ai;				//AI input
 	private static boolean normalMode;	//AI difficulty
-	private static int turn = 1;		//current turn
-	private static char icon;			//current icon
 	
 	public static void main(String[] args){
+		
 		game = new GameEngine();
 		keyboard = new Scanner(System.in);
 		boolean enableAI = false;	//AI mode
+		int turn = game.getTurn();
 		
 		//AI check
 		if ( args.length > 0 && args[0].toUpperCase().equals("AI") )
 		{
-			ai = new AI(PLAYER_O, PLAYER_X);
+			ai = new AI(PLAYER_2, PLAYER_1);
 			enableAI = true;
 			
 			if ( args.length > 1 && args[1].toLowerCase().equals("hard") )
@@ -42,39 +42,111 @@ public class CLIDemo {
 		System.out.println("Welcome to Tic-Tac-Toe!!\n");
 			
 		while ( turn < 10 )
-		{				
-			//determine current player (X or O)
-			icon = ( isOddTurn() ) ? PLAYER_X : PLAYER_O;
-			
+		{						
 			System.out.printf("Turn %d\n", turn);
+			
 			printBoard();
 		
 			//determine if AI or player move
-			game = ( enableAI && !isOddTurn() ) ? aiMove() : playerMove();
-
-			printBoard();
+			if ( enableAI && game.getCurrentPlayer() == PLAYER_2 )
+				game = moveAI();
+			else 
+				game = movePlayer();
 			
-			checkGameOver();
-			
-			//increment game state
-			turn++;
-			
-		}//end while
+			turn = checkGameOver();
+		}
 		
 		keyboard.close();
 	}
 	
 	/*
-	 * @return Boolean value if the current turn state is odd or even.
+	 * Checks for a win or draw and advances or resets accordingly.
+	 * If the game state is not a game over, the turn state is advanced.
+	 * 
+	 * @return	the advanced turn state.
 	 */
-	private static boolean isOddTurn(){
-		return (turn % 2 == 0) ? false : true;
+	private static int checkGameOver(){
+				
+		if ( game.isGameOver() )
+		{
+			System.out.printf("Turn %d\n", game.getTurn());
+			
+			printBoard();
+			
+			if ( game.isWin() )
+				System.out.printf("Player %c Wins!!!\n\n", game.getCurrentPlayer());
+			if ( game.isDraw() )
+				System.out.printf("Draw!!!\n\n");
+			if ( promptNewGame() )
+			{
+				game = new GameEngine();
+				return game.getTurn();
+			}
+			else
+			{
+				System.out.println("GG and Goodbye!!");
+				return 10;
+			}
+		}
+		
+		return game.advanceTurn();
+	}
+	
+	/*
+	 * AI makes its best move.
+	 * 
+	 * @return	new game state containing the AI's move.
+	 */
+	private static GameEngine moveAI(){
+		
+		//.32 normal mode
+		//0 hard mode
+		double p = ( normalMode ) ? .32 : 0;
+		int[] moveCoordinate;
+		
+		if ( Math.random() < p )
+			moveCoordinate = ai.randomMove(game);
+		else
+			moveCoordinate = ai.getBestMove(game, 9-game.getTurn());
+		
+		game.makeMove( moveCoordinate[0], moveCoordinate[1] );
+		
+		return game;
+	}
+	
+	/*
+	 * Prompts the player to make a move.
+	 * 
+	 * @return	new game state containing the added player's move.
+	 */
+	private static GameEngine movePlayer(){
+		int[] moveCoordinate;	//store row and column
+		boolean validMove;		//if valid move
+				
+		
+		//get user input, make move, and check if valid move
+		moveCoordinate = promptPlayerMove();
+		validMove = game.makeMove( moveCoordinate[0], moveCoordinate[1] );
+		
+		//re-do move if invalid
+		while ( !validMove )
+		{
+			System.out.printf("Turn %d\n", game.getTurn());
+			printBoard();
+			
+			System.out.printf("That position is occupied!\n\n");
+			moveCoordinate = promptPlayerMove();
+			validMove = game.makeMove( moveCoordinate[0], moveCoordinate[1] );
+		}
+		
+		return game;
 	}
 		
 	/*
 	 * Prints out a prompt and stores an integer value from input.
 	 * 
-	 * @return Integer value for either a row or column of a move.
+	 * @param	valueName	the input name that is being taken.
+	 * @return		an integer value that may represent the row or column.
 	 */
 	private static int promptEnterInteger(String valueName){
 		String valueStr;
@@ -105,31 +177,9 @@ public class CLIDemo {
 	}
 	
 	/*
-	 * Prompts the player to enter the row and column of a move.
-	 * 
-	 * @return Integer array of size 2 containing the player's move coordinate.
-	 * Index 0 is the row value and index 1 is the column value.
-	 */
-	private static int[] promptPlayerMove(){
-		
-		int[] input = new int[2];
-		
-		//display current player
-		System.out.printf("Player %c\n", icon);
-		
-		input[0] = promptEnterInteger("row");
-		input[1] = promptEnterInteger("column");
-		
-		//adjust input so the game can understand it
-		input[0]--;
-		input[1]--;
-		System.out.println();
-		
-		return input;
-	}
-	
-	/*
 	 * Prompts the player if they want to play again.
+	 * 
+	 * @return	is true if new game else false if quit.
 	 */
 	private static boolean promptNewGame(){
 				
@@ -144,82 +194,27 @@ public class CLIDemo {
 	}
 	
 	/*
-	 * AI makes its best move.
+	 * Prompts the player to enter the row and column of a move.
 	 * 
-	 * @return GameEngine object containing the AI's move.
+	 * @return	the player's move coordinate. Index 0 is the row value 
+	 * 	and index 1 is the column value.
 	 */
-	private static GameEngine aiMove(){
+	private static int[] promptPlayerMove(){
 		
-		//.32 normal mode
-		//0 hard mode
-		double p = ( normalMode ) ? .32 : 0;
-		int[] moveCoordinate;
+		int[] input = new int[2];
 		
-		if ( Math.random() < p )
-			moveCoordinate = ai.randomMove(game);
-		else
-			moveCoordinate = ai.getBestMove(game, 9-turn);
+		//display current player
+		System.out.printf("Player %c\n", game.getCurrentPlayer());
 		
-		game.makeMove( icon, moveCoordinate[0], moveCoordinate[1] );
+		input[0] = promptEnterInteger("row");
+		input[1] = promptEnterInteger("column");
 		
-		return game;
-	}
-	
-	/*
-	 * Prompts the player to make a move.
-	 * 
-	 * @return GameEngine object containing the added player's move.
-	 */
-	private static GameEngine playerMove(){
+		//adjust input so the game can understand it
+		input[0]--;
+		input[1]--;
+		System.out.println();
 		
-		int[] moveCoordinate;	//position of move
-		boolean validMove;		//if valid move
-				
-		
-		//get user input, make move, and check if valid move
-		moveCoordinate = promptPlayerMove();
-		validMove = game.makeMove(icon, moveCoordinate[0], moveCoordinate[1]);
-		
-		//re-do move if invalid
-		while ( !validMove )
-		{
-			System.out.printf("Turn %d\n", turn);
-			printBoard();
-			
-			System.out.printf("That position is occupied!\n\n");
-			moveCoordinate = promptPlayerMove();
-			validMove = game.makeMove(icon, moveCoordinate[0], moveCoordinate[1]);
-		}
-		
-		return game;
-	}
-	
-	/*
-	 * Checks for a win or draw and resets the game state accordingly.
-	 */
-	private static void checkGameOver(){
-		
-		if ( game.isWin(icon) )
-			System.out.printf("Player %c Wins!!!\n\n", icon);
-
-		else if ( game.isDraw() )
-			System.out.printf("Draw!!!\n\n");
-		
-		if ( game.isGameOver() )
-		{
-			if ( promptNewGame() )
-			{
-				//create new game
-				turn = 0;
-				game = new GameEngine();
-			}
-			else
-			{
-				//exit
-				turn = 9;
-				System.out.println("GG and Goodbye!!");
-			}
-		}
+		return input;
 	}
 	
 	/*
