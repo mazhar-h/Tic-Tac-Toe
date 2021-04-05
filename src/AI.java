@@ -28,13 +28,13 @@ public class AI {
 	/*
 	 * Determines an optimal move given a current game state.
 	 * 
-	 * @param	board		current game state.
+	 * @param	game		current game state.
 	 * @param	turnsLeft	amount of turns left in the game.
 	 * 
 	 * @return	the move coordinate where
 	 *	index 0 is the row value and index 1 is the column value.
 	 */
-	public int[] getBestMove(GameEngine board, int turnsLeft){
+	public int[] getBestMove(GameEngine game, int turnsLeft){
 		
 		int[] bestMove = new int[2];
 		int value = -999;
@@ -47,11 +47,11 @@ public class AI {
 			for(int column = 0; column < 3; column++)
 			{
 				//make next available move
-				if( board.isEmpty(row, column) )
+				if( game.isEmpty(row, column) )
 				{
-					char[][] b = board.getBoard();
+					char[][] b = game.getBoard();
 					b[row][column] = maximizingPlayer;
-					GameEngine g = new GameEngine(b, board.getTurn());
+					GameEngine g = new GameEngine(b, game.getTurn());
 					int v = minimax( g, turnsLeft, false );
 					
 					//if new move is better than current best move
@@ -68,11 +68,11 @@ public class AI {
 	}
 	
 	/* 
-	 * @param	board	current game state.
+	 * @param	game	current game state.
 	 * 
 	 * @return	value for the heuristic score.
 	 */
-	private int getHeuristicValue(GameEngine board){
+	private int getHeuristicValue(GameEngine game){
 		
 		/*
 		 *  O 	: 1
@@ -80,9 +80,9 @@ public class AI {
 		 *  X	: -1
 		 */
 		
-		if ( board.isWin(maximizingPlayer) )
+		if ( game.isWin(maximizingPlayer) )
 			return 1;
-		else if ( board.isDraw() )
+		else if ( game.isDraw() )
 			return 0;
 		else
 			return -1;
@@ -91,14 +91,14 @@ public class AI {
 	/*
 	 * Checks if current game state is a terminal state (game over)
 	 * 
-	 * @param	board	current game state.
+	 * @param	game	current game state.
 	 * 
 	 * @return	true if terminal else false if not.
 	 */
-	private boolean isTerminal(GameEngine board){
+	private boolean isTerminal(GameEngine game){
 		
 		//check if winning or draw state
-		if ( board.isGameOver() )
+		if ( game.isGameOver() )
 			return true;
 		else
 			return false;
@@ -108,16 +108,16 @@ public class AI {
 	 * Determines whether a successor game state is an optimal choice dictated
 	 * by the heuristic score.
 	 * 
-	 * @param	board 	current game state.
+	 * @param	game 	current game state.
 	 * @param 	depth	the depth that minimax will go.
 	 * @param	isMaximizingPlayer	determines if maximizing or minimizing player.
 	 * 
 	 * @return	value of the heuristic score.
 	 */
-	private int minimax(GameEngine board, int depth, boolean isMaximizingPlayer){
+	private int minimax(GameEngine game, int depth, boolean isMaximizingPlayer){
 		
-		if ( depth == 0 || isTerminal(board) )
-			return getHeuristicValue(board);
+		if ( depth == 0 || isTerminal(game) )
+			return getHeuristicValue(game);
 		
 		if ( isMaximizingPlayer ){
 			int value = -999;
@@ -126,11 +126,11 @@ public class AI {
 				for(int column = 0; column < 3; column++)
 				{	
 					//make next available move
-					if(board.isEmpty(row, column))
+					if(game.isEmpty(row, column))
 					{
-						char[][] b = board.getBoard();
+						char[][] b = game.getBoard();
 						b[row][column] = maximizingPlayer;
-						GameEngine g = new GameEngine(b, board.getTurn());
+						GameEngine g = new GameEngine(b, game.getTurn());
 						value = Math.max(value, minimax(g, depth - 1, false) );
 					}
 				}
@@ -143,11 +143,11 @@ public class AI {
 				for(int column = 0; column < 3; column++)
 				{
 					//make next available move
-					if(board.isEmpty(row, column))
+					if(game.isEmpty(row, column))
 					{
-						char[][] b = board.getBoard();
+						char[][] b = game.getBoard();
 						b[row][column] = minimizingPlayer;
-						GameEngine g = new GameEngine(b, board.getTurn());
+						GameEngine g = new GameEngine(b, game.getTurn());
 						value = Math.min(value, minimax(g, depth - 1, true) );
 					}
 				}
@@ -156,13 +156,13 @@ public class AI {
 	}
 	
 	/*
-	 * Determines placement at a random cell on the board.
+	 * Determines placement at a random cell on the game board.
 	 * 
-	 * @param	board	current game state.
+	 * @param	game	current game state.
 	 * 
 	 * @return	move coordinate for a random row and column.
 	 */
-	public int[] randomMove(GameEngine board){
+	public int[] randomMove(GameEngine game){
 
 		Random rand = new Random(System.currentTimeMillis());
 		int[] coordinate = new int[2];
@@ -172,7 +172,7 @@ public class AI {
 			int x = rand.nextInt(3);
 			int y = rand.nextInt(3);
 			
-			if ( board.isEmpty(x, y) ){
+			if ( game.isEmpty(x, y) ){
 				coordinate[0] = x;
 				coordinate[1] = y;
 				break;

@@ -15,6 +15,7 @@ public class CLIDemo {
 	private static final char PLAYER_1 = 'X';
 	private static final char PLAYER_2 = 'O';
 	private static GameEngine game;
+	private static int turn;			//turn state
 	private static Scanner keyboard;	//player input
 	private static AI ai;			//AI input
 	private static boolean normalMode;	//AI difficulty
@@ -24,7 +25,7 @@ public class CLIDemo {
 		game = new GameEngine();
 		keyboard = new Scanner(System.in);
 		boolean enableAI = false;	//AI mode
-		int turn = game.getTurn();
+		turn = game.getTurn();
 		
 		//AI check
 		if ( args.length > 0 && args[0].toUpperCase().equals("AI") )
@@ -69,7 +70,7 @@ public class CLIDemo {
 				
 		if ( game.isGameOver() )
 		{
-			System.out.printf("Turn %d\n", game.getTurn());
+			System.out.printf("Turn %d\n", turn);
 			
 			printBoard();
 			
@@ -107,7 +108,7 @@ public class CLIDemo {
 		if ( Math.random() < p )
 			moveCoordinate = ai.randomMove(game);
 		else
-			moveCoordinate = ai.getBestMove(game, 9-game.getTurn());
+			moveCoordinate = ai.getBestMove(game, 9-turn);
 		
 		game.makeMove( moveCoordinate[0], moveCoordinate[1] );
 		
@@ -131,7 +132,7 @@ public class CLIDemo {
 		//re-do move if invalid
 		while ( !validMove )
 		{
-			System.out.printf("Turn %d\n", game.getTurn());
+			System.out.printf("Turn %d\n", turn);
 			printBoard();
 			
 			System.out.printf("That position is occupied!\n\n");
@@ -164,7 +165,6 @@ public class CLIDemo {
 			valueStr = keyboard.next();
 		}
 		
-		//convert to integer
 		valueInt = Integer.parseInt(valueStr);
 		
 		//check if in range
@@ -204,7 +204,6 @@ public class CLIDemo {
 		
 		int[] input = new int[2];
 		
-		//display current player
 		System.out.printf("Player %c\n", game.getCurrentPlayer());
 		
 		input[0] = promptEnterInteger("row");
