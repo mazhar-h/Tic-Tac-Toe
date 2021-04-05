@@ -16,7 +16,7 @@ public class CLIDemo {
 	private static final char PLAYER_2 = 'O';
 	private static GameEngine game;
 	private static Scanner keyboard;	//player input
-	private static AI ai;				//AI input
+	private static AI ai;			//AI input
 	private static boolean normalMode;	//AI difficulty
 	
 	public static void main(String[] args){
@@ -146,6 +146,7 @@ public class CLIDemo {
 	 * Prints out a prompt and stores an integer value from input.
 	 * 
 	 * @param	valueName	the input name that is being taken.
+	 *
 	 * @return	an integer value that may represent the row or column.
 	 */
 	private static int promptEnterInteger(String valueName){
@@ -197,7 +198,7 @@ public class CLIDemo {
 	 * Prompts the player to enter the row and column of a move.
 	 * 
 	 * @return	the player's move coordinate. Index 0 is the row value 
-	 *	and index 1 is the column value.
+	 *		and index 1 is the column value.
 	 */
 	private static int[] promptPlayerMove(){
 		
