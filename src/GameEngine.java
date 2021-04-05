@@ -49,7 +49,8 @@ public class GameEngine {
 	
 	/*
 	 * Advances the turn state.
-	 * @return		the advanced turn state.
+	 * 
+	 * @return	the advanced turn state.
 	 */
 	public int advanceTurn(){
 		return ++turn;
@@ -59,7 +60,8 @@ public class GameEngine {
 	 * Checks for a horizontal winning game state.
 	 * 
 	 * @param	player	the icon of the current player.
-	 * @return			is true if winning state else false if not.
+	 * 
+	 * @return	is true if winning state else false if not.
 	 */
 	private boolean checkHorizontals(char player){
 				
@@ -83,7 +85,8 @@ public class GameEngine {
 	 * Checks for a vertical winning game state.
 	 * 
 	 * @param	player	the icon of the current player.
-	 * @return			is true if winning state else false if not.
+	 * 
+	 * @return	is true if winning state else false if not.
 	 */
 	private boolean checkVerticals(char player){	
 				
@@ -107,7 +110,8 @@ public class GameEngine {
 	 * Checks for a diagonal winning game state.
 	 * 
 	 * @param	player	the icon of the current player.
-	 * @return			is true if winning state else false if not.
+	 * 
+	 * @return	is true if winning state else false if not.
 	 */
 	private boolean checkDiagonals(char player){
 		
@@ -194,7 +198,8 @@ public class GameEngine {
 	 * 
 	 * @param	row		row value on the board [0-3].
 	 * @param	column	column value on the board [0-3].
-	 * @return			is true if empty else false if not empty.
+	 * 
+	 * @return	is true if empty else false if not empty.
 	 */
 	public boolean isEmpty(int row, int column){
 		
@@ -207,7 +212,7 @@ public class GameEngine {
 	/*
 	 * Checks if the game is over determined by a win or draw game state.
 	 * 
-	 * @return		is true game is over else false if not.
+	 * @return	is true game is over else false if not.
 	 */
 	public boolean isGameOver(){
 		
@@ -229,7 +234,8 @@ public class GameEngine {
 	 * Checks for a winning game state.
 	 * 
 	 * @param	player	the icon of the current player.
-	 * @return			is true if winning state else false if note.
+	 * 
+	 * @return	is true if winning state else false if note.
 	 */
 	public boolean isWin(char player){
 		if ( checkHorizontals(player) || checkVerticals(player) || checkDiagonals(player) )
@@ -241,7 +247,7 @@ public class GameEngine {
 	/*
 	 * Checks for a winning game state for the current player.
 	 * 
-	 * @return		is true if winning state else false if note.
+	 * @return	is true if winning state else false if not.
 	 */
 	public boolean isWin(){
 		return isWin( getCurrentPlayer() );
@@ -251,7 +257,8 @@ public class GameEngine {
 	 * 
 	 * @param	row		row value on the board [0-3].
 	 * @param	column	column value on the board [0-3].
-	 * @return			is false if cell is occupied.
+	 * 
+	 * @return	is false if cell is occupied.
 	 */
 	public boolean makeMove(int row, int column){
 		

@@ -30,8 +30,9 @@ public class AI {
 	 * 
 	 * @param	board		current game state.
 	 * @param	turnsLeft	amount of turns left in the game.
-	 * @return  			the move coordinate where
-	 * 						index 0 is the row value and index 1 is the column value.
+	 * 
+	 * @return	the move coordinate where
+	 *	index 0 is the row value and index 1 is the column value.
 	 */
 	public int[] getBestMove(GameEngine board, int turnsLeft){
 		
@@ -68,7 +69,8 @@ public class AI {
 	
 	/* 
 	 * @param	board	current game state.
-	 * @return			value for the heuristic score.
+	 * 
+	 * @return	value for the heuristic score.
 	 */
 	private int getHeuristicValue(GameEngine board){
 		
@@ -90,7 +92,8 @@ public class AI {
 	 * Checks if current game state is a terminal state (game over)
 	 * 
 	 * @param	board	current game state.
-	 * @return			true if terminal else false if not.
+	 * 
+	 * @return	true if terminal else false if not.
 	 */
 	private boolean isTerminal(GameEngine board){
 		
@@ -108,7 +111,8 @@ public class AI {
 	 * @param	board 	current game state.
 	 * @param 	depth	the depth that minimax will go.
 	 * @param	isMaximizingPlayer	determines if maximizing or minimizing player.
-	 * @return			value of the heuristic score.
+	 * 
+	 * @return	value of the heuristic score.
 	 */
 	private int minimax(GameEngine board, int depth, boolean isMaximizingPlayer){
 		
@@ -155,7 +159,8 @@ public class AI {
 	 * Determines placement at a random cell on the board.
 	 * 
 	 * @param	board	current game state.
-	 * @return			move coordinate for a random row and column.
+	 * 
+	 * @return	move coordinate for a random row and column.
 	 */
 	public int[] randomMove(GameEngine board){
 

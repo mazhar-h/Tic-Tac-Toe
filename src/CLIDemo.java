@@ -63,7 +63,7 @@ public class CLIDemo {
 	 * Checks for a win or draw and advances or resets accordingly.
 	 * If the game state is not a game over, the turn state is advanced.
 	 * 
-	 * @return		the advanced turn state.
+	 * @return	the advanced turn state.
 	 */
 	private static int checkGameOver(){
 				
@@ -95,7 +95,7 @@ public class CLIDemo {
 	/*
 	 * AI makes its best move.
 	 * 
-	 * @return		new game state containing the AI's move.
+	 * @return	new game state containing the AI's move.
 	 */
 	private static GameEngine moveAI(){
 		
@@ -117,7 +117,7 @@ public class CLIDemo {
 	/*
 	 * Prompts the player to make a move.
 	 * 
-	 * @return		new game state containing the added player's move.
+	 * @return	new game state containing the added player's move.
 	 */
 	private static GameEngine movePlayer(){
 		int[] moveCoordinate;	//store row and column
@@ -146,7 +146,7 @@ public class CLIDemo {
 	 * Prints out a prompt and stores an integer value from input.
 	 * 
 	 * @param	valueName	the input name that is being taken.
-	 * @return				an integer value that may represent the row or column.
+	 * @return	an integer value that may represent the row or column.
 	 */
 	private static int promptEnterInteger(String valueName){
 		String valueStr;
@@ -179,7 +179,7 @@ public class CLIDemo {
 	/*
 	 * Prompts the player if they want to play again.
 	 * 
-	 * @return		is true if new game else false if quit.
+	 * @return	is true if new game else false if quit.
 	 */
 	private static boolean promptNewGame(){
 				
@@ -196,8 +196,8 @@ public class CLIDemo {
 	/*
 	 * Prompts the player to enter the row and column of a move.
 	 * 
-	 * @return		the player's move coordinate. Index 0 is the row value 
-	 * 				and index 1 is the column value.
+	 * @return	the player's move coordinate. Index 0 is the row value 
+	 *	and index 1 is the column value.
 	 */
 	private static int[] promptPlayerMove(){
 		
