@@ -196,8 +196,8 @@ public class GameEngine {
 	/*
 	 * Checks if the cell at the specified row and column is empty.
 	 * 
-	 * @param	row	row value on the board [0-3].
-	 * @param	column	column value on the board [0-3].
+	 * @param	row	row value on the board [0-2].
+	 * @param	column	column value on the board [0-2].
 	 * 
 	 * @return	true if empty, false if not empty.
 	 */
@@ -255,8 +255,8 @@ public class GameEngine {
 	
 	/* Marks the cell at the specified row and column.
 	 * 
-	 * @param	row	row value on the board [0-3].
-	 * @param	column	column value on the board [0-3].
+	 * @param	row	row value on the board [0-2].
+	 * @param	column	column value on the board [0-2].
 	 * 
 	 * @return	false if cell is occupied.
 	 */
