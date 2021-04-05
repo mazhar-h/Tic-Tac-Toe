@@ -40,7 +40,7 @@ public class GUIDemo implements ActionListener{
 	private boolean enableAI = false;	//AI mode
 
 	private JFrame frame = new JFrame();
-	private JPanel boardPanel = new JPanel();	//holds the board cells
+	private JPanel boardPanel = new JPanel();			//holds the board cells
 	private CellButton[][] boardCells = new CellButton[3][3];	//holds a marked move
 	
 	/*
@@ -165,7 +165,7 @@ public class GUIDemo implements ActionListener{
 	 * AI determines its best move.
 	 * 
 	 * @return	contains the AI's move coordinate. Index 0 is the row value 
-	 * 	and index 1 is the column value.
+	 * 		and index 1 is the column value.
 	 */
 	private int[] getAIMove(){
 		
@@ -219,8 +219,7 @@ public class GUIDemo implements ActionListener{
 	}
 	
 	/*
-	 * Asks player to chose game mode
-	 * Player vs Player or Player vs AI
+	 * Asks player to chose game mode (Player vs Player or Player vs AI).
 	 */
 	private void promptSelectMode(){
 		
