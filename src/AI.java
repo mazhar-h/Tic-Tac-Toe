@@ -75,9 +75,9 @@ public class AI {
 	private int getHeuristicValue(GameEngine game){
 		
 		/*
-		 * O Win: 1
-		 * DRAW	: 0
-		 * X Win: -1
+		 * maximizingPlayer Win	: 1
+		 * DRAW			: 0
+		 * minimizingPlayer Win	: -1
 		 */
 		
 		if ( game.isWin(maximizingPlayer) )
