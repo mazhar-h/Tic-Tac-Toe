@@ -13,8 +13,8 @@ public class GameEngine {
 	private static final char PLAYER_1 = 'X';
 	private static final char PLAYER_2 = 'O';
 	private static final char PLACEHOLDER = '_';
-	private char[][] board = new char[3][3];	//game state
-	private int turn;		//turn state
+	private char[][] board = new char[3][3];	//board state
+	private int turn;				//turn state
 	
 	/*
 	 * Constructor
@@ -33,7 +33,7 @@ public class GameEngine {
 	/*
 	 * Constructor
 	 * 
-	 * @param	board	game board of a game.
+	 * @param	board	the game board.
 	 * @param	turn	the turn state.
 	 */
 	public GameEngine(char[][] board, int turn){
@@ -61,7 +61,7 @@ public class GameEngine {
 	 * 
 	 * @param	player	the icon of the current player.
 	 * 
-	 * @return	is true if winning state else false if not.
+	 * @return	true if winning state, false if not.
 	 */
 	private boolean checkHorizontals(char player){
 				
@@ -86,7 +86,7 @@ public class GameEngine {
 	 * 
 	 * @param	player	the icon of the current player.
 	 * 
-	 * @return	is true if winning state else false if not.
+	 * @return	true if winning state, false if not.
 	 */
 	private boolean checkVerticals(char player){	
 				
@@ -111,7 +111,7 @@ public class GameEngine {
 	 * 
 	 * @param	player	the icon of the current player.
 	 * 
-	 * @return	is true if winning state else false if not.
+	 * @return	true if winning state, false if not.
 	 */
 	private boolean checkDiagonals(char player){
 		
@@ -175,7 +175,7 @@ public class GameEngine {
 	/*
 	 * Checks for a draw games state.
 	 * 
-	 * @return	is true if draw else false if not.
+	 * @return	true if draw state, false if not.
 	 */
 	public boolean isDraw(){
 		
@@ -199,7 +199,7 @@ public class GameEngine {
 	 * @param	row		row value on the board [0-3].
 	 * @param	column	column value on the board [0-3].
 	 * 
-	 * @return	is true if empty else false if not empty.
+	 * @return	true if empty, false if not empty.
 	 */
 	public boolean isEmpty(int row, int column){
 		
@@ -212,7 +212,7 @@ public class GameEngine {
 	/*
 	 * Checks if the game is over determined by a win or draw game state.
 	 * 
-	 * @return	is true game is over else false if not.
+	 * @return	true game is over, false if not.
 	 */
 	public boolean isGameOver(){
 		
@@ -235,7 +235,7 @@ public class GameEngine {
 	 * 
 	 * @param	player	the icon of the current player.
 	 * 
-	 * @return	is true if winning state else false if note.
+	 * @return	true if winning state, false if not.
 	 */
 	public boolean isWin(char player){
 		if ( checkHorizontals(player) || checkVerticals(player) || checkDiagonals(player) )
@@ -247,7 +247,7 @@ public class GameEngine {
 	/*
 	 * Checks for a winning game state for the current player.
 	 * 
-	 * @return	is true if winning state else false if not.
+	 * @return	true if winning state, false if not.
 	 */
 	public boolean isWin(){
 		return isWin( getCurrentPlayer() );
@@ -258,7 +258,7 @@ public class GameEngine {
 	 * @param	row		row value on the board [0-3].
 	 * @param	column	column value on the board [0-3].
 	 * 
-	 * @return	is false if cell is occupied.
+	 * @return	false if cell is occupied.
 	 */
 	public boolean makeMove(int row, int column){
 		
