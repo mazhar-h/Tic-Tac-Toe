@@ -17,14 +17,14 @@ public class AI {
 	private char maximizingPlayer;
 	private char minimizingPlayer;
 	
-	public AI (TTTEngine game, boolean isdDifficultyHard, char maximizingPlayer, char minimizingPlayer) {
+	public AI (TTTEngine game, boolean isDifficultyHard, char maximizingPlayer, char minimizingPlayer) {
 		this.game = game;
-		this.isDifficultyHard = isdDifficultyHard;
+		this.isDifficultyHard = isDifficultyHard;
 		this.maximizingPlayer = maximizingPlayer;
 		this.minimizingPlayer = minimizingPlayer;
 	}
 	
-	public int[] getBestMove() {
+	private int[] getBestMove() {
 		int[] bestMove = new int[2];
 		int value = Integer.MIN_VALUE;
 		
@@ -83,6 +83,10 @@ public class AI {
 		
 		return false;
 	}
+
+	public boolean isDifficultyHard() {
+		return isDifficultyHard;
+	}
 	
 	private int minimax(TTTEngine game, int depth, int alpha, int beta, boolean isMaximizingPlayer) {
 		if ( depth == 0 || isTerminal(game) )
@@ -128,7 +132,7 @@ public class AI {
 		}
 	}
 	
-	public int[] randomMove() {
+	private int[] randomMove() {
 		Random rand = new Random(System.currentTimeMillis());
 		int[] moveCoordinate = new int[2];
 		

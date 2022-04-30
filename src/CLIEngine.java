@@ -135,6 +135,7 @@ public class CLIEngine {
 		if ( input.toLowerCase().equals("y") ) 
 		{
 			game = new TTTEngine();
+			ai = new AI(game, ai.isDifficultyHard(), TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);
 			return true;
 		}
 		
