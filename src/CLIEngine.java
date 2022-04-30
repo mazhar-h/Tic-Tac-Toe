@@ -25,7 +25,7 @@ public class CLIEngine {
 	
 	private void configureGame(String[] args) {
 		for (String arg : args) {
-			if ( arg.toUpperCase().equals("normal") )
+			if ( arg.toLowerCase().equals("normal") )
 				ai = new AI(game, false, TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);		
 			else if ( arg.toLowerCase().equals("hard") )
 				ai = new AI(game, true, TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);
@@ -97,6 +97,8 @@ public class CLIEngine {
 			
 			System.out.printf("That position is occupied!\n\n");
 			moveCoordinate = promptPlayerMove();
+			row = moveCoordinate[0];
+			col = moveCoordinate[1];
 			validMove = game.makeMove( row, col );
 		}		
 	}
