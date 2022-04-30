@@ -27,7 +27,6 @@ import javax.swing.JPanel;
 
 public class GUIEngine implements ActionListener {
 	
-	private static final String GAME_NAME = "Tic-Tac-Toe";
 	private static final int GAME_SIZE = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()*.2);
 	private boolean isAIHardDifficulty;
 	private AI ai;
@@ -184,7 +183,7 @@ public class GUIEngine implements ActionListener {
 	private void setupBoard() {
 		JPanel boardPanel;
 		frame = new JFrame();
-		frame.setTitle(GAME_NAME);
+		frame.setTitle(TTTEngine.GAME_NAME);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setMinimumSize( new Dimension(GAME_SIZE, GAME_SIZE));
 		frame.setResizable(false);
