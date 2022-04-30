@@ -97,6 +97,8 @@ public class CLIEngine {
 			
 			System.out.printf("That position is occupied!\n\n");
 			moveCoordinate = promptPlayerMove();
+			row = moveCoordinate[0];
+			col = moveCoordinate[1];
 			validMove = game.makeMove( row, col );
 		}		
 	}
