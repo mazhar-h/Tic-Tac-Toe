@@ -133,8 +133,7 @@ public class CLIEngine {
 		return valueInt;
 	}
 	
-	private boolean promptNewGame() {
-				
+	private boolean promptNewGame() {		
 		System.out.print("Play again? (y/n): ");
 		String input = keyboard.next();
 		System.out.println();
@@ -151,7 +150,6 @@ public class CLIEngine {
 	}
 	
 	private int[] promptPlayerMove() {
-		
 		int[] input = new int[2];
 		
 		System.out.printf("Player %c\n", game.getCurrentPlayer());
@@ -163,8 +161,7 @@ public class CLIEngine {
 		return input;
 	}
 	
-	private void printBoard() {
-		
+	private void printBoard() {	
 		char[][] board = game.getBoard();
 		
 		for(int row = 0; row < board.length; row++)
