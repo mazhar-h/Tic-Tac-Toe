@@ -1,11 +1,11 @@
 /**
 *Tic-Tac-Toe Game
 *
-*Description: Tic-Tac-Toe AI using minimax. Goes second as O.
+*Description: Tic-Tac-Toe AI using minimax with alpha beta pruning. Goes second as O.
 *
 *Date: 03/22/2021
 *@author  Mazhar Hossain
-*@version 0.0.56
+*@version 0.0.60
 */
 import java.util.Random;
 
@@ -14,47 +14,25 @@ public class AI {
 	private char maximizingPlayer;
 	private char minimizingPlayer;
 	
-	/*
-	 * Constructor
-	 * 
-	 * @param	maximizingPlayer	the player who will have the best move determined for.
-	 * @param	minimizingPlayer	the player who is playing against the maximizing player.
-	 */
-	public AI (char maximizingPlayer, char minimizingPlayer){
+	public AI (char maximizingPlayer, char minimizingPlayer) {
 		this.maximizingPlayer = maximizingPlayer;
 		this.minimizingPlayer = minimizingPlayer;
 	}
 	
-	/*
-	 * Determines an optimal move given a current game state.
-	 * 
-	 * @param	game		current game state.
-	 * @param	turnsLeft	amount of turns left in the game.
-	 * 
-	 * @return	the move coordinate where
-	 *	index 0 is the row value and index 1 is the column value.
-	 */
-	public int[] getBestMove(GameEngine game, int turnsLeft){
-		
+	public int[] getBestMove(TTTEngine game, int turnsLeft) {
 		int[] bestMove = new int[2];
-		int value = -999;
+		int value = Integer.MIN_VALUE;
 		
-		/*
-		 * for each possible move available
-		 * find the best move to out-play the minimizing player
-		 */
-		for(int row = 0; row < 3; row++)
-			for(int column = 0; column < 3; column++)
+		for(int row = 0; row < TTTEngine.BOARD_SIZE; row++)
+			for(int column = 0; column < TTTEngine.BOARD_SIZE; column++)
 			{
-				//make next available move
 				if( game.isEmpty(row, column) )
 				{
 					char[][] b = game.getBoard();
 					b[row][column] = maximizingPlayer;
-					GameEngine g = new GameEngine(b, game.getTurn());
-					int v = minimax( g, turnsLeft, false );
+					TTTEngine g = new TTTEngine(b, game.getTurn()+1);
+					int v = minimax( g, turnsLeft, Integer.MIN_VALUE, Integer.MAX_VALUE, false );
 					
-					//if new move is better than current best move
 					if ( value <  v )
 					{
 						value = v;
@@ -62,115 +40,82 @@ public class AI {
 						bestMove[1] = column;
 					}
 				}
-			}//end for
-		
+			}
 		return bestMove;
 	}
 	
-	/* 
-	 * @param	game	current game state.
-	 * 
-	 * @return	value for the heuristic score.
-	 */
-	private int getHeuristicValue(GameEngine game){
-		
+	private int getHeuristicValue(TTTEngine game, int depth) {
 		/*
-		 * maximizingPlayer Win	: 1
+		 * maximizingPlayer Win	: 1 + depth
 		 * DRAW			: 0
-		 * minimizingPlayer Win	: -1
+		 * minimizingPlayer Win	: -1 - depth
 		 */
 		
 		if ( game.isWin(maximizingPlayer) )
-			return 1;
-		else if ( game.isDraw() )
+			return 1 + depth;
+		if ( game.isDraw() )
 			return 0;
 		else
-			return -1;
+			return -1 - depth;
 	}
 	
-	/*
-	 * Checks if current game state is a terminal state (game over)
-	 * 
-	 * @param	game	current game state.
-	 * 
-	 * @return	true if terminal else false if not.
-	 */
-	private boolean isTerminal(GameEngine game){
-		
-		//check if winning or draw state
+	private boolean isTerminal(TTTEngine game) {
 		if ( game.isGameOver() )
 			return true;
-		else
-			return false;
+		
+		return false;
 	}
 	
-	/*
-	 * Determines whether a successor game state is an optimal choice dictated
-	 * by the heuristic score.
-	 * 
-	 * @param	game 	current game state.
-	 * @param 	depth	the depth that minimax will go.
-	 * @param	isMaximizingPlayer	determines if maximizing or minimizing player.
-	 * 
-	 * @return	value of the heuristic score.
-	 */
-	private int minimax(GameEngine game, int depth, boolean isMaximizingPlayer){
-		
+	private int minimax(TTTEngine game, int depth, int alpha, int beta, boolean isMaximizingPlayer) {
 		if ( depth == 0 || isTerminal(game) )
-			return getHeuristicValue(game);
+			return getHeuristicValue(game, depth);
 		
 		if ( isMaximizingPlayer ){
-			int value = -999;
-			
-			for(int row = 0; row < 3; row++)
-				for(int column = 0; column < 3; column++)
+			int value = Integer.MIN_VALUE;
+			for(int row = 0; row < TTTEngine.BOARD_SIZE; row++)
+				for(int column = 0; column < TTTEngine.BOARD_SIZE; column++)
 				{	
-					//make next available move
 					if(game.isEmpty(row, column))
 					{
 						char[][] b = game.getBoard();
 						b[row][column] = maximizingPlayer;
-						GameEngine g = new GameEngine(b, game.getTurn());
-						value = Math.max(value, minimax(g, depth - 1, false) );
+						TTTEngine g = new TTTEngine(b, game.getTurn()+1);
+						value = Math.max(value, minimax(g, depth - 1, alpha, beta, false));
+						if ( value >= beta ) break;
+						alpha = Math.max(alpha, value);
 					}
+					if ( value >= beta ) break;
 				}
 			return value;
 		}
 		else {
-			int value = 999;
-			
-			for(int row = 0; row < 3; row++)
-				for(int column = 0; column < 3; column++)
+			int value = Integer.MAX_VALUE;
+			for(int row = 0; row < TTTEngine.BOARD_SIZE; row++)
+				for(int column = 0; column < TTTEngine.BOARD_SIZE; column++)
 				{
-					//make next available move
 					if(game.isEmpty(row, column))
 					{
 						char[][] b = game.getBoard();
 						b[row][column] = minimizingPlayer;
-						GameEngine g = new GameEngine(b, game.getTurn());
-						value = Math.min(value, minimax(g, depth - 1, true) );
+						TTTEngine g = new TTTEngine(b, game.getTurn()+1);
+						value = Math.min(value, minimax(g, depth - 1, alpha, beta, true));
+						if ( value <= alpha ) break;
+						beta = Math.min(beta, value);
 					}
+					if ( value <= alpha ) break;
 				}
 			return value;
 		}
 	}
 	
-	/*
-	 * Determines placement at a random cell on the game board.
-	 * 
-	 * @param	game	current game state.
-	 * 
-	 * @return	move coordinate for a random row and column.
-	 */
-	public int[] randomMove(GameEngine game){
-
+	public int[] randomMove(TTTEngine game) {
 		Random rand = new Random(System.currentTimeMillis());
 		int[] coordinate = new int[2];
 		
 		while(true)
 		{
-			int x = rand.nextInt(3);
-			int y = rand.nextInt(3);
+			int x = rand.nextInt(TTTEngine.BOARD_SIZE);
+			int y = rand.nextInt(TTTEngine.BOARD_SIZE);
 			
 			if ( game.isEmpty(x, y) ){
 				coordinate[0] = x;
@@ -178,7 +123,6 @@ public class AI {
 				break;
 			}
 		}
-		
 		return coordinate;
 	}	
 }
