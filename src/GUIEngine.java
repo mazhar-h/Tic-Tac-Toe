@@ -235,7 +235,9 @@ public class GUIEngine implements ActionListener {
 			this.setHorizontalAlignment(JLabel.CENTER);
 		}
 		
-		public boolean isClicked() { return isClicked; }
+		public boolean isClicked() {
+			return isClicked; 
+		}
 		
 		public void markButton(char player) {
 			if ( player == TTTEngine.PLAYER_1 )
