@@ -16,7 +16,7 @@ java TTTIDemo AI hard
 
 How to run GUI version:
 ```
-javac TTTDemo.java GUIEngine.java AI.java GUIEngine.java
+javac TTTDemo.java GUIEngine.java AI.java TTTEngine.java
 java TTTDemo GUI
 ```
 or execute TicTacToe.jar
