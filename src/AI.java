@@ -11,15 +11,20 @@ import java.util.Random;
 
 public class AI {
 	
+	private static final double RATIONAL_RATE = .55;
+	private TTTEngine game;
+	private boolean isDifficultyHard;
 	private char maximizingPlayer;
 	private char minimizingPlayer;
 	
-	public AI (char maximizingPlayer, char minimizingPlayer) {
+	public AI (TTTEngine game, boolean isdDifficultyHard, char maximizingPlayer, char minimizingPlayer) {
+		this.game = game;
+		this.isDifficultyHard = isdDifficultyHard;
 		this.maximizingPlayer = maximizingPlayer;
 		this.minimizingPlayer = minimizingPlayer;
 	}
 	
-	public int[] getBestMove(TTTEngine game, int turnsLeft) {
+	public int[] getBestMove() {
 		int[] bestMove = new int[2];
 		int value = Integer.MIN_VALUE;
 		
@@ -31,7 +36,7 @@ public class AI {
 					char[][] b = game.getBoard();
 					b[row][column] = maximizingPlayer;
 					TTTEngine g = new TTTEngine(b, game.getTurn()+1);
-					int v = minimax( g, turnsLeft, Integer.MIN_VALUE, Integer.MAX_VALUE, false );
+					int v = minimax( g, 9-game.getTurn(), Integer.MIN_VALUE, Integer.MAX_VALUE, false );
 					
 					if ( value <  v )
 					{
@@ -41,6 +46,7 @@ public class AI {
 					}
 				}
 			}
+
 		return bestMove;
 	}
 	
@@ -57,6 +63,18 @@ public class AI {
 			return 0;
 		else
 			return -1 - depth;
+	}
+
+	public int[] getMove() {
+		int[] moveCoordinate;
+		double rationality = ( !isDifficultyHard ) ? RATIONAL_RATE : 0;
+		
+		if ( Math.random() < rationality )
+			moveCoordinate = randomMove();
+		else
+			moveCoordinate = getBestMove();
+		
+		return moveCoordinate;
 	}
 	
 	private boolean isTerminal(TTTEngine game) {
@@ -86,6 +104,7 @@ public class AI {
 					}
 					if ( value >= beta ) break;
 				}
+
 			return value;
 		}
 		else {
@@ -104,13 +123,14 @@ public class AI {
 					}
 					if ( value <= alpha ) break;
 				}
+
 			return value;
 		}
 	}
 	
-	public int[] randomMove(TTTEngine game) {
+	public int[] randomMove() {
 		Random rand = new Random(System.currentTimeMillis());
-		int[] coordinate = new int[2];
+		int[] moveCoordinate = new int[2];
 		
 		while(true)
 		{
@@ -118,11 +138,12 @@ public class AI {
 			int y = rand.nextInt(TTTEngine.BOARD_SIZE);
 			
 			if ( game.isEmpty(x, y) ){
-				coordinate[0] = x;
-				coordinate[1] = y;
+				moveCoordinate[0] = x;
+				moveCoordinate[1] = y;
 				break;
 			}
 		}
-		return coordinate;
+		
+		return moveCoordinate;
 	}	
 }

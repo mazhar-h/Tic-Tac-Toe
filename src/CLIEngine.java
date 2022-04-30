@@ -15,22 +15,20 @@ public class CLIEngine {
 	private TTTEngine game;
 	private Scanner keyboard;
 	private AI ai;
-	private boolean aiDifficultyHard;
 	
 	public CLIEngine(String[] args) {
 		game = new TTTEngine();
 		keyboard = new Scanner(System.in);
-		aiDifficultyHard = false;
 		configureGame(args);
 		startGame();
 	}
 	
 	private void configureGame(String[] args) {
 		for (String arg : args) {
-			if ( arg.toUpperCase().equals("AI") )
-				ai = new AI(TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);		
+			if ( arg.toUpperCase().equals("normal") )
+				ai = new AI(game, false, TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);		
 			else if ( arg.toLowerCase().equals("hard") )
-				aiDifficultyHard = true;
+				ai = new AI(game, true, TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);
 		}
 	}
 	
@@ -74,13 +72,7 @@ public class CLIEngine {
 	
 	private void moveAI() {
 		int row, col;
-		int[] moveCoordinate;
-		double p = ( !aiDifficultyHard ) ? .55 : 0;
-		
-		if ( Math.random() < p )
-			moveCoordinate = ai.randomMove(game);
-		else
-			moveCoordinate = ai.getBestMove(game, 9-game.getTurn());
+		int[] moveCoordinate = ai.getMove();
 		
 		row = moveCoordinate[0];
 		col = moveCoordinate[1];
