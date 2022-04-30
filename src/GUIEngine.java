@@ -106,7 +106,7 @@ public class GUIEngine implements ActionListener {
 		row = moveCoordinate[0];
 		col = moveCoordinate[1];
 		
-		board[row][col].markButton(game.getCurrentPlayer());;
+		board[row][col].markButton(game.getCurrentPlayer());
 		game.makeMove( row, col );
 	}
 		
