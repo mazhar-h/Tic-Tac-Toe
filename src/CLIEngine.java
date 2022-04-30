@@ -90,10 +90,13 @@ public class CLIEngine {
 	
 	private void movePlayer() {
 		int[] moveCoordinate;
+		int row, col;
 		boolean validMove;
 						
 		moveCoordinate = promptPlayerMove();
-		validMove = game.makeMove( moveCoordinate[0], moveCoordinate[1] );
+		row = moveCoordinate[0];
+		col = moveCoordinate[1];
+		validMove = game.makeMove( row, col );
 		
 		while ( !validMove )
 		{
@@ -102,7 +105,7 @@ public class CLIEngine {
 			
 			System.out.printf("That position is occupied!\n\n");
 			moveCoordinate = promptPlayerMove();
-			validMove = game.makeMove( moveCoordinate[0], moveCoordinate[1] );
+			validMove = game.makeMove( row, col );
 		}		
 	}
 		
