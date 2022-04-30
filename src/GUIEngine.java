@@ -28,7 +28,6 @@ import javax.swing.JPanel;
 public class GUIEngine implements ActionListener {
 	
 	private static final int GAME_SIZE = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()*.2);
-	private boolean isAIHardDifficulty;
 	private AI ai;
 	private TTTEngine game;
 	private JFrame frame;
@@ -92,13 +91,7 @@ public class GUIEngine implements ActionListener {
 			return;
 
 		int row, col;
-		int[] moveCoordinate;
-		double p = ( !isAIHardDifficulty ) ? .55 : 0;
-		
-		if ( Math.random() < p )
-			moveCoordinate = ai.randomMove(game);
-		else
-			moveCoordinate = ai.getBestMove(game, 9-game.getTurn());	
+		int[] moveCoordinate = ai.getMove();	
 		
 		row = moveCoordinate[0];
 		col = moveCoordinate[1];
@@ -110,7 +103,6 @@ public class GUIEngine implements ActionListener {
 	private void newGame() {
 		game = new TTTEngine();
 		ai = null;
-		isAIHardDifficulty = false;
 		
 		if ( board != null ) buttonsReset();
 		
@@ -130,10 +122,10 @@ public class GUIEngine implements ActionListener {
 			
 			if ( responseSelectAIDifficulty == JOptionPane.CLOSED_OPTION )
 				System.exit(0);
+			if ( responseSelectAIDifficulty == JOptionPane.YES_OPTION )
+				ai = new AI(game, false, TTTEngine.PLAYER_2, TTTEngine.PLAYER_1); 
 			else if ( responseSelectAIDifficulty == JOptionPane.NO_OPTION )
-				isAIHardDifficulty = true;
-			
-			ai = new AI(TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);
+				ai = new AI(game, true, TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);
 		}		
 	}
 
