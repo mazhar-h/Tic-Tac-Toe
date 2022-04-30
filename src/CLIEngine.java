@@ -12,8 +12,8 @@ import java.util.Scanner;
 
 public class CLIEngine {
 	
-	private TTTEngine game = new TTTEngine();
-	private Scanner keyboard = new Scanner(System.in);
+	private TTTEngine game;
+	private Scanner keyboard;
 	private AI ai;
 	private boolean aiDifficultyHard;
 	
@@ -37,7 +37,7 @@ public class CLIEngine {
 	private void startGame() {
 		boolean gameLoop = true;
 		
-		System.out.println("Welcome to Tic-Tac-Toe!!\n");
+		System.out.printf("Welcome to %s!!\n\n", TTTEngine.GAME_NAME);
 		
 		while ( gameLoop ) 
 		{

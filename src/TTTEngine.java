@@ -10,6 +10,7 @@
 
 public class TTTEngine {
 	
+	public static final String GAME_NAME = "Tic-Tac-Toe";
 	public static final char PLAYER_1 = 'X';
 	public static final char PLAYER_2 = 'O';
 	private static final char PLACEHOLDER = '_';
