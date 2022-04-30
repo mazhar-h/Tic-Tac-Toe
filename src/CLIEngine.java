@@ -22,9 +22,10 @@ public class CLIEngine {
 		keyboard = new Scanner(System.in);
 		aiDifficultyHard = false;
 		checkArguments(args);
+		startGame();
 	}
 	
-	public void checkArguments(String[] args) {
+	private void checkArguments(String[] args) {
 		for (String arg : args) {
 			if ( arg.toUpperCase().equals("AI") )
 				ai = new AI(TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);		
@@ -33,7 +34,7 @@ public class CLIEngine {
 		}
 	}
 	
-	public void startGame() {
+	private void startGame() {
 		boolean gameLoop = true;
 		
 		System.out.println("Welcome to Tic-Tac-Toe!!\n");
