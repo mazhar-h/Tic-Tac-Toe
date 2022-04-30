@@ -41,9 +41,6 @@ public class CLIEngine {
 		{
 			while ( !isGameOver() )
 			{						
-				System.out.printf("Turn %d\n", game.getTurn());
-				printBoard();
-				
 				if ( ai != null && game.getCurrentPlayer() == TTTEngine.PLAYER_2 )
 					moveAI();
 				else 
@@ -84,7 +81,9 @@ public class CLIEngine {
 		int[] moveCoordinate;
 		int row, col;
 		boolean validMove;
-						
+
+		System.out.printf("Turn %d\n", game.getTurn());
+		printBoard();				
 		moveCoordinate = promptPlayerMove();
 		row = moveCoordinate[0];
 		col = moveCoordinate[1];
@@ -94,7 +93,6 @@ public class CLIEngine {
 		{
 			System.out.printf("Turn %d\n", game.getTurn());
 			printBoard();
-			
 			System.out.printf("That position is occupied!\n\n");
 			moveCoordinate = promptPlayerMove();
 			row = moveCoordinate[0];
