@@ -72,6 +72,7 @@ public class CLIEngine {
 	}
 	
 	private void moveAI() {
+		int row, col;
 		int[] moveCoordinate;
 		double p = ( !aiDifficultyHard ) ? .55 : 0;
 		
@@ -80,7 +81,10 @@ public class CLIEngine {
 		else
 			moveCoordinate = ai.getBestMove(game, 9-game.getTurn());
 		
-		game.makeMove( moveCoordinate[0], moveCoordinate[1] );		
+		row = moveCoordinate[0];
+		col = moveCoordinate[1];
+
+		game.makeMove( row, col );		
 	}
 	
 	private void movePlayer() {
