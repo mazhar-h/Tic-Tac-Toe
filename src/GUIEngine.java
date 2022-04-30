@@ -36,8 +36,7 @@ public class GUIEngine implements ActionListener {
 	private BoardButton[][] board;
 	
 	public GUIEngine() {
-		game = new TTTEngine();
-		isAIHardDifficulty = false;
+		newGame();
 	}
 	
 	@Override
@@ -90,11 +89,6 @@ public class GUIEngine implements ActionListener {
 		newGame();
 	}
 	
-	public void launchGUI() {
-		userConfigureGame();
-		setupBoard();
-	}
-	
 	private void moveAI() {
 		if ( ai == null 
 				|| game.getCurrentPlayer() != TTTEngine.PLAYER_2 
@@ -122,8 +116,10 @@ public class GUIEngine implements ActionListener {
 		ai = null;
 		isAIHardDifficulty = false;
 		
-		buttonsReset();
-		launchGUI();
+		if ( board != null ) resetButtons();
+		
+		userConfigureGame();
+		setupBoard();
 	}
 	
 	private void userConfigureGame() {

@@ -1,19 +1,16 @@
 
 public class TTTDemo {
-	public static void main(String[] args){
-		GUIEngine gui = new GUIEngine();
-		CLIEngine cli = new CLIEngine(args);
-		
+	public static void main(String[] args) {
 		for (String arg : args) 
 		{
 			if ( arg.toUpperCase().equals("GUI") )
 			{
-				gui.launchGUI();
+				new GUIEngine();
 				break;
 			}
 			else if ( arg.toUpperCase().equals("CLI") ) 
 			{
-				cli.startGame();
+				new CLIEngine(args);
 				break;
 			}			
 		}
