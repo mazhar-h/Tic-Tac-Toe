@@ -4,9 +4,13 @@ Here is Tic-Tac-Toe playable through your terminal/CLI or graphical user interfa
 
 The artificial intelligence used in player vs AI mode was possible through the [minimax algorithm](https://en.wikipedia.org/wiki/Minimax) which performs decision making. In this version of the AI, the use of minimax with [alpha-beta pruning](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning) allows for more strategic and quicker decision making!
 
+Compile:
+```
+javac TTTDemo.java GUIEngine.java CLIEngine.java AI.java TTTEngine.java
+```
+
 Running local player vs player in the CLI version:
 ```
-javac TTTDemo.java CLIEngine.java AI.java TTTEngine.java
 java TTTDemo CLI
 ```
 
@@ -21,7 +25,6 @@ java TTTIDemo CLI AI hard
 
 Running the GUI version (includes both modes):
 ```
-javac TTTDemo.java GUIEngine.java AI.java TTTEngine.java
 java TTTDemo GUI
 
 or
