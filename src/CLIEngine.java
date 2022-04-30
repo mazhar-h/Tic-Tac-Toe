@@ -21,11 +21,11 @@ public class CLIEngine {
 		game = new TTTEngine();
 		keyboard = new Scanner(System.in);
 		aiDifficultyHard = false;
-		checkArguments(args);
+		configureGame(args);
 		startGame();
 	}
 	
-	private void checkArguments(String[] args) {
+	private void configureGame(String[] args) {
 		for (String arg : args) {
 			if ( arg.toUpperCase().equals("AI") )
 				ai = new AI(TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);		
@@ -160,7 +160,7 @@ public class CLIEngine {
 		return input;
 	}
 	
-	public void printBoard() {
+	private void printBoard() {
 		
 		char[][] board = game.getBoard();
 		

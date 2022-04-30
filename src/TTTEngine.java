@@ -16,10 +16,12 @@ public class TTTEngine {
 	private static final char PLACEHOLDER = '_';
 	public static final int TURN_GAMEOVER = 10;
 	public static final int BOARD_SIZE = 3;
-	private char[][] board = new char[BOARD_SIZE][BOARD_SIZE];
+	private char[][] board;
 	private int turn;
 	
 	public TTTEngine(){
+		board = new char[BOARD_SIZE][BOARD_SIZE];
+		
 		for(int row = 0; row < board.length; row++)
 			for(int column = 0; column < board[0].length; column++)
 				board[row][column] = PLACEHOLDER;

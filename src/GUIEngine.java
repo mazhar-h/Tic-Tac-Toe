@@ -42,8 +42,7 @@ public class GUIEngine implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		for (int row = 0; row < TTTEngine.BOARD_SIZE; row++) {
 			for (int col = 0; col < TTTEngine.BOARD_SIZE; col++) {
-				BoardButton currentButton = board[row][col];
-				
+				BoardButton currentButton = board[row][col];				
 				if ( e.getSource() == currentButton && !currentButton.isClicked() )
 				{
 					currentButton.markButton(game.getCurrentPlayer());;
@@ -82,10 +81,8 @@ public class GUIEngine implements ActionListener {
 		responsePlayAgain = promptPlayAgain();
 		frame.dispose();
 
-		if ( responsePlayAgain != JOptionPane.YES_OPTION )
-			return;		
-		
-		newGame();
+		if ( responsePlayAgain == JOptionPane.YES_OPTION )
+			newGame();
 	}
 	
 	private void moveAI() {
