@@ -40,11 +40,11 @@ public class CLIEngine {
 		while ( gameLoop ) 
 		{
 			while ( !isGameOver() )
-			{						
+			{		
+				movePlayer();
+
 				if ( ai != null && game.getCurrentPlayer() == TTTEngine.PLAYER_2 )
-					moveAI();
-				else 
-					movePlayer();				
+					moveAI(); 
 			}
 			gameLoop = promptNewGame();
 		}
