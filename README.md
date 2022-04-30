@@ -28,8 +28,4 @@ java TTTIDemo CLI hard
 Running the GUI version (includes both modes):
 ```
 java TTTDemo GUI
-
-or
- 
-execute TicTacToe.jar
 ```
