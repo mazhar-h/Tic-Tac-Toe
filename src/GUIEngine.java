@@ -28,9 +28,7 @@ import javax.swing.JPanel;
 public class GUIEngine implements ActionListener {
 	
 	private static final String GAME_NAME = "Tic-Tac-Toe";
-	private static final int GAME_SIZE = (int) ((int) Toolkit.getDefaultToolkit()
-															   .getScreenSize()
-															   .getWidth()*.2);
+	private static final int GAME_SIZE = (int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth()*.2);
 	private boolean isAIHardDifficulty;
 	private AI ai;
 	private TTTEngine game;
@@ -60,10 +58,16 @@ public class GUIEngine implements ActionListener {
 		}
 	}	
 	
-	private void disableButtons() {
+	private void buttonsDisable() {
 		for ( BoardButton[] rowOfButtons : board )
 			for ( BoardButton button : rowOfButtons )
 				button.setEnabled(false);
+	}
+
+	private void buttonsReset() {
+		for ( BoardButton[] rowOfButtons : board )
+			for ( BoardButton button : rowOfButtons )
+				button.reset();
 	}
 
 	private void handleGameOver() {
@@ -76,7 +80,7 @@ public class GUIEngine implements ActionListener {
 		else if ( game.isDraw() )
 			JOptionPane.showMessageDialog(null, messageDraw);
 
-		disableButtons();
+		buttonsDisable();
 		responsePlayAgain = promptPlayAgain();
 		frame.dispose();
 
@@ -118,7 +122,7 @@ public class GUIEngine implements ActionListener {
 		ai = null;
 		isAIHardDifficulty = false;
 		
-		resetButtons();
+		buttonsReset();
 		launchGUI();
 	}
 	
@@ -180,13 +184,7 @@ public class GUIEngine implements ActionListener {
 				title, 
 				JOptionPane.YES_NO_OPTION);
 	}
-	
-	private void resetButtons() {
-		for ( BoardButton[] rowOfButtons : board )
-			for ( BoardButton button : rowOfButtons )
-				button.reset();
-	}
-	
+
 	private void setupBoard() {
 		JPanel boardPanel;
 		frame = new JFrame();
@@ -255,6 +253,8 @@ public class GUIEngine implements ActionListener {
 			isClicked = false;
 		}
 		
-		public void setClicked(boolean bool) { isClicked = bool; }
+		public void setClicked(boolean bool) { 
+			isClicked = bool; 
+		}
 	}
 }
