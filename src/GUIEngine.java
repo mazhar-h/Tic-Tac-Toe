@@ -116,7 +116,7 @@ public class GUIEngine implements ActionListener {
 		ai = null;
 		isAIHardDifficulty = false;
 		
-		if ( board != null ) resetButtons();
+		if ( board != null ) buttonsReset();
 		
 		userConfigureGame();
 		setupBoard();
