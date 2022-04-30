@@ -65,19 +65,7 @@ public class GUIEngine implements ActionListener {
 			for ( BoardButton button : rowOfButtons )
 				button.setEnabled(false);
 	}
-	
-	private int[] getAIMove() {
-		int[] moveCoordinate;
-		double p = ( !isAIHardDifficulty ) ? .55 : 0;
-		
-		if ( Math.random() < p )
-			moveCoordinate = ai.randomMove(game);
-		else
-			moveCoordinate = ai.getBestMove(game, 2000);	
-				
-		return moveCoordinate;
-	}
-	
+
 	private void handleGameOver() {
 		int responsePlayAgain;
 		String messageWin = String.valueOf( game.getPreviousPlayer() ) + " Wins!";
@@ -108,10 +96,18 @@ public class GUIEngine implements ActionListener {
 				|| game.getCurrentPlayer() != TTTEngine.PLAYER_2 
 				|| game.getTurn() >= TTTEngine.TURN_GAMEOVER )
 			return;
+
+		int row, col;
+		int[] moveCoordinate;
+		double p = ( !isAIHardDifficulty ) ? .55 : 0;
 		
-		int[] moveCoordinate = getAIMove();
-		int row = moveCoordinate[0];
-		int col = moveCoordinate[1];
+		if ( Math.random() < p )
+			moveCoordinate = ai.randomMove(game);
+		else
+			moveCoordinate = ai.getBestMove(game, 9-game.getTurn());	
+		
+		row = moveCoordinate[0];
+		col = moveCoordinate[1];
 		
 		board[row][col].markButton(game.getCurrentPlayer());;
 		game.makeMove( row, col );
