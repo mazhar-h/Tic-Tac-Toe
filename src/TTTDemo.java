@@ -1,4 +1,12 @@
-
+/**
+*Tic-Tac-Toe
+*
+*Description: Tic-Tac-Toe playable in CLI or GUI. X goes first.
+*
+*Date: 03/22/2021
+*@author  Mazhar Hossain
+*@version 0.0.70
+*/
 public class TTTDemo {
 	public static void main(String[] args) {
 		for (String arg : args) 
