@@ -8,6 +8,7 @@ public class GUIEngine  implements ActionListener {
 	private AI ai;
 	private TTTEngine game;
 	private GUIBoard board;
+	private GUIPrompt prompt;
 	
 	public GUIEngine() {
 		newGame();
@@ -27,11 +28,12 @@ public class GUIEngine  implements ActionListener {
 	}
 	
 	private void handleGameOver() {
-		promptGameOver();
+		prompt.displayGameOver();
 		board.buttonsDisable();
-				
-		if ( promptPlayAgain() == JOptionPane.YES_OPTION )
-		{
+		
+		if ( prompt.selectPlayAgain() != JOptionPane.YES_OPTION )
+			System.exit(0);
+		else {
 			board.close();
 			newGame();
 		}
@@ -58,71 +60,21 @@ public class GUIEngine  implements ActionListener {
 	}
 
 	private void newGame() {
-		ai = null;		
-		userConfigureGame();
+		ai = null;
 		game = new TTTEngine();
+		prompt = new GUIPrompt(game);
+		userConfigureGame();
 		board = new GUIBoard(this);
 	}
 	
-	private void promptGameOver() {
-		String messageWin = String.valueOf( game.getPreviousPlayer() ) + " Wins!";
-		String messageDraw = "Draw!!";
-		String title = "Game Over";
-		
-		if ( game.isWin( game.getPreviousPlayer() ) )
-			JOptionPane.showMessageDialog(null, messageWin, title, JOptionPane.INFORMATION_MESSAGE);
-		else if ( game.isDraw() )
-			JOptionPane.showMessageDialog(null, messageDraw, title, JOptionPane.INFORMATION_MESSAGE);
-	}
-
-	private int promptSelectAIDifficulty() {
-		String message = "Select AI difficulty!";
-		String title = "Artificial Intelligence";
-		String[] optionsAI = {"Normal", "Hard"};
-				
-		return JOptionPane.showOptionDialog(null,
-				message, 
-				title, 
-				JOptionPane.YES_NO_OPTION,
-			    JOptionPane.QUESTION_MESSAGE,
-			    null,
-			    optionsAI, 
-			    optionsAI[0]);
-	}
-	
-	private int promptSelectMode() {
-		String message = "Select a game mode!!";
-		String title = "Welcome!";
-		String[] options = {"Player vs Player", "Player vs AI"};
-		
-		return JOptionPane.showOptionDialog(null,
-				message, 
-				title, 
-				JOptionPane.YES_NO_OPTION,
-			    JOptionPane.QUESTION_MESSAGE,
-			    null,
-			    options, 
-			    options[0]);
-	}
-	
-	private int promptPlayAgain() {
-		String message = "Would you like to play again?";
-		String title = "Game Over";	
-		
-		return JOptionPane.showConfirmDialog(null, 
-				message, 
-				title, 
-				JOptionPane.YES_NO_OPTION);
-	}
-	
 	private void userConfigureGame() {
-		switch ( promptSelectMode() ) {
+		switch ( prompt.selectMode() ) {
 			case JOptionPane.CLOSED_OPTION:
 				System.exit(0);
 			case JOptionPane.YES_OPTION:
 				break;
 			case JOptionPane.NO_OPTION:
-				switch ( promptSelectAIDifficulty() ) {
+				switch ( prompt.selectAIDifficulty() ) {
 					case JOptionPane.CLOSED_OPTION:
 						System.exit(0);
 					case JOptionPane.YES_OPTION:
