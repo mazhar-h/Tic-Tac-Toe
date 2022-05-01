@@ -2,9 +2,9 @@ import java.util.Scanner;
 
 public class CLIEngine {
 	
+	private AI ai;
 	private TTTEngine game;
 	private Scanner keyboard;
-	private AI ai;
 	
 	public CLIEngine(String[] args) {
 		game = new TTTEngine();

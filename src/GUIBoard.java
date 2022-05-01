@@ -16,11 +16,11 @@ public class GUIBoard {
 	private GUIBoardButton[][] board;
 	
 	public GUIBoard(ActionListener listener) {
-		createGameBoard();
-		addGameButtons(listener);
+		createBoard();
+		addBoardButtons(listener);
 	}
 		
-	private void addGameButtons(ActionListener listener) {
+	private void addBoardButtons(ActionListener listener) {
 		JPanel boardPanel = new JPanel();
 		boardPanel.setLayout( new GridLayout(TTTEngine.BOARD_SIZE,TTTEngine.BOARD_SIZE) );
 		boardPanel.setBackground(Color.WHITE);
@@ -63,7 +63,7 @@ public class GUIBoard {
 		frame.dispose();
 	}
 	
-	private void createGameBoard() {
+	private void createBoard() {
 		frame = new JFrame();
 		frame.setTitle(TTTEngine.GAME_NAME);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
