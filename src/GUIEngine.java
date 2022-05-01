@@ -132,6 +132,7 @@ public class GUIEngine  implements ActionListener {
 						ai = new AI(game, true, TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);
 						break;
 				}
+				break;
 		} 		
 	}
 }
