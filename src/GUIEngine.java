@@ -29,13 +29,12 @@ public class GUIEngine  implements ActionListener {
 	private void handleGameOver() {
 		promptGameOver();
 		board.buttonsDisable();
-		
-		int responsePlayAgain = promptPlayAgain();
-		
-		board.close();
-		
-		if ( responsePlayAgain == JOptionPane.YES_OPTION )
+				
+		if ( promptPlayAgain() == JOptionPane.YES_OPTION )
+		{
+			board.close();
 			newGame();
+		}
 	}
 	
 	private void moveAI() {
@@ -59,23 +58,21 @@ public class GUIEngine  implements ActionListener {
 	}
 
 	private void newGame() {
-		game = new TTTEngine();
-		ai = null;
-		
-		if ( board != null ) board.buttonsReset();
-		
+		ai = null;		
 		userConfigureGame();
+		game = new TTTEngine();
 		board = new GUIBoard(this);
 	}
 	
 	private void promptGameOver() {
 		String messageWin = String.valueOf( game.getPreviousPlayer() ) + " Wins!";
 		String messageDraw = "Draw!!";
+		String title = "Game Over";
 		
 		if ( game.isWin( game.getPreviousPlayer() ) )
-			JOptionPane.showMessageDialog(null, messageWin);
+			JOptionPane.showMessageDialog(null, messageWin, title, JOptionPane.INFORMATION_MESSAGE);
 		else if ( game.isDraw() )
-			JOptionPane.showMessageDialog(null, messageDraw);
+			JOptionPane.showMessageDialog(null, messageDraw, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private int promptSelectAIDifficulty() {
@@ -119,21 +116,23 @@ public class GUIEngine  implements ActionListener {
 	}
 	
 	private void userConfigureGame() {
-		int responseSelectAIDifficulty;
-		int responseSelectMode = promptSelectMode();
-
-		if ( responseSelectMode == JOptionPane.CLOSED_OPTION )
-			System.exit(0);
-		else if ( responseSelectMode == JOptionPane.NO_OPTION ) 
-		{
-			responseSelectAIDifficulty = promptSelectAIDifficulty();
-			
-			if ( responseSelectAIDifficulty == JOptionPane.CLOSED_OPTION )
+		switch ( promptSelectMode() ) {
+			case JOptionPane.CLOSED_OPTION:
 				System.exit(0);
-			if ( responseSelectAIDifficulty == JOptionPane.YES_OPTION )
-				ai = new AI(game, false, TTTEngine.PLAYER_2, TTTEngine.PLAYER_1); 
-			else if ( responseSelectAIDifficulty == JOptionPane.NO_OPTION )
-				ai = new AI(game, true, TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);
-		}		
+			case JOptionPane.YES_OPTION:
+				break;
+			case JOptionPane.NO_OPTION:
+				switch ( promptSelectAIDifficulty() ) {
+					case JOptionPane.CLOSED_OPTION:
+						System.exit(0);
+					case JOptionPane.YES_OPTION:
+						ai = new AI(game, false, TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);
+						break;
+					case JOptionPane.NO_OPTION:
+						ai = new AI(game, true, TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);
+						break;
+				}
+				break;
+		} 		
 	}
 }
