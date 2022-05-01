@@ -1,12 +1,3 @@
-/**
-*Tic-Tac-Toe Game
-*
-*Description: Tic-Tac-Toe AI using minimax with alpha beta pruning. Goes second as O.
-*
-*Date: 03/22/2021
-*@author  Mazhar Hossain
-*@version 0.0.60
-*/
 import java.util.Random;
 
 public class AI {

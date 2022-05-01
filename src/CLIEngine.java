@@ -1,13 +1,3 @@
-/**
-*Tic-Tac-Toe Game (CLI)
-*
-*Description: Playable Tic-Tac-Toe on CLI. Player vs player mode 
-* and player vs AI mode. X goes first. O goes second.
-*
-*Date: 03/22/2021
-*@author  Mazhar Hossain
-*@version 0.0.60
-*/
 import java.util.Scanner;
 
 public class CLIEngine {

@@ -1,13 +1,3 @@
-/**
-*Tic-Tac-Toe Game
-*
-*Description: Tic-Tac-Toe Game Engine
-*
-*Date: 03/22/2021
-*@author  Mazhar Hossain
-*@version 0.0.61
-*/
-
 public class TTTEngine {
 	
 	public static final String GAME_NAME = "Tic-Tac-Toe";
