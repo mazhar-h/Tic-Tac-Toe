@@ -12,15 +12,9 @@ public class GUIBoardButton  extends JButton {
 	
 	public GUIBoardButton(int row, int column) {
 		super();
-		isClicked = false;
 		this.row = row;
 		this.column = column;
-		this.setText( "" );
-		this.setFont( new Font("Dialog", Font.PLAIN, 60) );
-		this.setFocusable(false);
-		this.setRolloverEnabled(false);
-		this.setBackground(Color.WHITE);
-		this.setHorizontalAlignment(JLabel.CENTER);
+		initializeButton();
 	}
 	
 	public int getRow() {
@@ -33,6 +27,16 @@ public class GUIBoardButton  extends JButton {
 	
 	public boolean isClicked() {
 		return isClicked; 
+	}
+
+	private void initializeButton() {
+		isClicked = false;
+		this.setText( "" );
+		this.setFont( new Font("Dialog", Font.PLAIN, 60) );
+		this.setFocusable(false);
+		this.setRolloverEnabled(false);
+		this.setBackground(Color.WHITE);
+		this.setHorizontalAlignment(JLabel.CENTER);
 	}
 	
 	public void markButton(char player) {
