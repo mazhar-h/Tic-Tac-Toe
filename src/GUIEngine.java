@@ -7,7 +7,7 @@ public class GUIEngine  implements ActionListener {
 
 	private AI ai;
 	private TTTEngine game;
-	private GUIBoard guiBoard;
+	private GUIBoard board;
 	
 	public GUIEngine() {
 		newGame();
@@ -28,11 +28,11 @@ public class GUIEngine  implements ActionListener {
 	
 	private void handleGameOver() {
 		promptGameOver();
-		guiBoard.buttonsDisable();
+		board.buttonsDisable();
 		
 		int responsePlayAgain = promptPlayAgain();
 		
-		guiBoard.close();
+		board.close();
 		
 		if ( responsePlayAgain == JOptionPane.YES_OPTION )
 			newGame();
@@ -54,7 +54,7 @@ public class GUIEngine  implements ActionListener {
 	}
 	
 	private void movePlayer(int row, int col) {
-		guiBoard.setButton(row, col, game.getCurrentPlayer());
+		board.setButton(row, col, game.getCurrentPlayer());
 		game.makeMove( row, col );
 	}
 
@@ -62,10 +62,10 @@ public class GUIEngine  implements ActionListener {
 		game = new TTTEngine();
 		ai = null;
 		
-		if ( guiBoard != null ) guiBoard.buttonsReset();
+		if ( board != null ) board.buttonsReset();
 		
 		userConfigureGame();
-		guiBoard = new GUIBoard(this);
+		board = new GUIBoard(this);
 	}
 	
 	private void promptGameOver() {
