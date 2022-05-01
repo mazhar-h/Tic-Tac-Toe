@@ -31,11 +31,7 @@ public class CLIEngine {
 			while ( !isGameOver() )
 			{		
 				movePlayer();
-
-				if ( ai != null 
-						&& game.getCurrentPlayer() == TTTEngine.PLAYER_2
-						&& game.getTurn() < TTTEngine.TURN_GAMEOVER)
-					makeMove(ai.getMove());
+				moveAI();
 			}
 			gameLoop = handleGameOver();
 		}
@@ -70,6 +66,13 @@ public class CLIEngine {
 		int col = moveCoordinate[1];
 		
 		return game.makeMove( row, col );
+	}
+
+	private void moveAI() {
+	if ( ai != null 
+		&& game.getCurrentPlayer() == TTTEngine.PLAYER_2 
+		&& game.getTurn() < TTTEngine.TURN_GAMEOVER)
+		makeMove(ai.getMove());
 	}
 	
 	private void movePlayer() {
