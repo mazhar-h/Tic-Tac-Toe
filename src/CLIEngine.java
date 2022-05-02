@@ -69,10 +69,10 @@ public class CLIEngine {
 	}
 
 	private void moveAI() {
-	if ( ai != null 
-		&& game.getCurrentPlayer() == TTTEngine.PLAYER_2 
-		&& game.getTurn() < TTTEngine.TURN_GAMEOVER)
-		makeMove(ai.getMove());
+		if ( ai != null 
+			&& game.getCurrentPlayer() == TTTEngine.PLAYER_2 
+			&& game.getTurn() < TTTEngine.TURN_GAMEOVER)
+			makeMove(ai.getMove());
 	}
 	
 	private void movePlayer() {

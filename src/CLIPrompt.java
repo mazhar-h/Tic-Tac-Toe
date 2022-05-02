@@ -85,13 +85,11 @@ public class CLIPrompt {
 	private void printBoard() {	
 		char[][] board = game.getBoard();
 		
-		for(int row = 0; row < board.length; row++)
-		{
-			for(int column = 0; column < board[0].length; column++)
-				System.out.printf("%c ", board[row][column]);
-			
-			System.out.println();
-		}
+        for ( char[] rowOfPositions : board ) {
+            for ( char position : rowOfPositions ) 
+                System.out.printf("%c ", position);
+            System.out.println();
+        }
 		System.out.println();
 	}
 	
