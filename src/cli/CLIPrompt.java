@@ -1,4 +1,7 @@
+package cli;
 import java.util.Scanner;
+
+import core.TTTEngine;
 
 public class CLIPrompt {
 	

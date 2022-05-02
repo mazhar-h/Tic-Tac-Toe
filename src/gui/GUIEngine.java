@@ -1,9 +1,13 @@
+package gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
-public class GUIEngine  implements ActionListener {
+import core.AI;
+import core.TTTEngine;
+
+public class GUIEngine implements ActionListener {
 
 	private AI ai;
 	private TTTEngine game;
@@ -45,11 +49,9 @@ public class GUIEngine  implements ActionListener {
 				|| game.getTurn() >= TTTEngine.TURN_GAMEOVER )
 			return;
 
-		int row, col;
-		int[] moveCoordinate = ai.getMove();	
-		
-		row = moveCoordinate[0];
-		col = moveCoordinate[1];
+		int[] moveCoordinate = ai.getMove();
+		int row = moveCoordinate[0];
+		int col = moveCoordinate[1];
 
 		movePlayer(row, col);
 	}
@@ -84,7 +86,6 @@ public class GUIEngine  implements ActionListener {
 						ai = new AI(game, true, TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);
 						break;
 				}
-				break;
-		} 		
+		} 		break;
 	}
 }

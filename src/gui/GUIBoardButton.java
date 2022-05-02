@@ -1,8 +1,11 @@
+package gui;
 import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+
+import core.TTTEngine;
 
 public class GUIBoardButton  extends JButton {
 	
@@ -28,7 +31,7 @@ public class GUIBoardButton  extends JButton {
 	public boolean isClicked() {
 		return isClicked; 
 	}
-
+	
 	private void initializeButton() {
 		isClicked = false;
 		this.setText( "" );
