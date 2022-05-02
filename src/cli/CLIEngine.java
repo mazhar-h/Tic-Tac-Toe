@@ -1,3 +1,7 @@
+package cli;
+
+import core.AI;
+import core.TTTEngine;
 
 public class CLIEngine {
 	

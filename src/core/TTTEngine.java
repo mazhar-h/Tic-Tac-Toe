@@ -1,3 +1,5 @@
+package core;
+
 public class TTTEngine {
 	
 	public static final String GAME_NAME = "Tic-Tac-Toe";
