@@ -91,7 +91,7 @@ public class CLIPrompt {
 		for ( char[] rowOfPositions : board ) {
 			for ( char position : rowOfPositions ) 
 				System.out.printf("%c ", position);
-				System.out.println();
+			System.out.println();
 		}
 		System.out.println();
 	}
