@@ -31,13 +31,7 @@ public class TTTEngine implements AIObject {
 	}
 	
 	public TTTEngine(TTTEngine c) {
-		char[][] copy = new char[BOARD_SIZE][BOARD_SIZE];
-		char[][] boardCopy = c.getBoard();
-		
-		for(int row = 0; row < boardCopy.length; row++)
-				System.arraycopy(boardCopy[row], 0, copy[row], 0, boardCopy.length);
-		
-		this.board = copy;
+		this.board = c.getBoard();
 		this.turn = c.getTurn();
 		this.isAIDifficultyHard = c.isAIDifficultyHard;
 		this.maximizingPlayer = c.maximizingPlayer;
