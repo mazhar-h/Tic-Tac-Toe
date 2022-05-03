@@ -1,8 +1,13 @@
 package core;
 
-public class TTTEngine {
+import java.util.LinkedList;
+
+import ai.AIObject;
+
+public class TTTEngine implements AIObject {
 	
 	public static final String GAME_NAME = "Tic-Tac-Toe";
+	public static final double RATIONALITY_RATE = .55;
 	public static final char PLAYER_1 = 'X';
 	public static final char PLAYER_2 = 'O';
 	private static final char PLACEHOLDER = '_';
@@ -10,6 +15,8 @@ public class TTTEngine {
 	public static final int BOARD_SIZE = 3;
 	private char[][] board;
 	private int turn;
+	private boolean isAIDifficultyHard;
+	private Object maximizingPlayer;
 	
 	public TTTEngine(){
 		board = new char[BOARD_SIZE][BOARD_SIZE];
@@ -19,16 +26,21 @@ public class TTTEngine {
 				board[row][column] = PLACEHOLDER;
 
 		turn = 1;
+		isAIDifficultyHard = false;
+		maximizingPlayer = null;
 	}
 	
-	public TTTEngine(char[][] board, int turn) {
+	public TTTEngine(TTTEngine c) {
 		char[][] copy = new char[BOARD_SIZE][BOARD_SIZE];
+		char[][] boardCopy = c.getBoard();
 		
-		for(int row = 0; row < board.length; row++)
-				System.arraycopy(board[row], 0, copy[row], 0, board.length);
+		for(int row = 0; row < boardCopy.length; row++)
+				System.arraycopy(boardCopy[row], 0, copy[row], 0, boardCopy.length);
 		
 		this.board = copy;
-		this.turn = turn;
+		this.turn = c.getTurn();
+		this.isAIDifficultyHard = c.isAIDifficultyHard;
+		this.maximizingPlayer = c.maximizingPlayer;
 	}
 		
 	private boolean checkHorizontals(char player) {
@@ -91,6 +103,31 @@ public class TTTEngine {
 		return false;
 	}
 	
+	@Override
+	public TTTEngine clone() {
+		return new TTTEngine(this);
+	}
+	
+	@Override
+	public Move[] getAvailableMoves() {
+		LinkedList<Move> list = new LinkedList<>();
+		
+		for (int row = 0; row < BOARD_SIZE; row++)
+			for (int col = 0; col < BOARD_SIZE; col++) {
+				Move m = new Move(row, col);
+				
+				if ( isEmpty( m ) )
+					list.add( m );
+			}
+		
+		Move[] moves = new Move[list.size()];
+		
+		for (int i = 0; i < moves.length; i++)
+			moves[i] = list.pop();
+		
+		return moves;
+	}
+	
 	public char[][] getBoard() {
 		char[][] copy = new char[BOARD_SIZE][BOARD_SIZE];
 		
@@ -104,6 +141,11 @@ public class TTTEngine {
 		return ( turn % 2 == 0 ) ? PLAYER_2 : PLAYER_1;
 	}
 	
+	@Override
+	public Object getMaximizingPlayer() {
+		return maximizingPlayer;
+	}
+	
 	public char getPreviousPlayer() {
 		return ( (turn - 1) % 2 == 0 ) ? PLAYER_2 : PLAYER_1;
 	}
@@ -112,6 +154,11 @@ public class TTTEngine {
 		return turn;
 	}
 	
+	public boolean isAIDifficultyHard() {
+		return isAIDifficultyHard;
+	}
+	
+	@Override
 	public boolean isDraw() {		
 		if ( !isWin(PLAYER_1) && !isWin(PLAYER_2) && turn == TURN_GAMEOVER )
 			return true;
@@ -119,13 +166,14 @@ public class TTTEngine {
 		return false;
 	}
 	
-	public boolean isEmpty(int row, int column) {
-		if (board[row][column] == PLACEHOLDER)
+	public boolean isEmpty(Move m) {
+		if (board[m.getRow()][m.getColumn()] == PLACEHOLDER)
 			return true;
 		
 		return false;
 	}
 	
+	@Override
 	public boolean isGameOver() {
 		if ( isWin(PLAYER_1) || isWin(PLAYER_2) || turn == TURN_GAMEOVER )
 			return true;
@@ -133,20 +181,27 @@ public class TTTEngine {
 		return false;
 	}
 	
-	public boolean isWin(char player) {
-		if ( checkHorizontals(player) || checkVerticals(player) || checkDiagonals(player) )
+	@Override
+	public boolean isWin(Object player) {
+		if ( checkHorizontals((char) player) 
+				|| checkVerticals((char) player) 
+				|| checkDiagonals((char) player) )
 			return true;
 		
 		return false;
 	}
-	
-	public boolean makeMove(int row, int column) {
-		if ( !isEmpty(row, column) )
-			return false;
-		
-		board[row][column] = getCurrentPlayer();
+
+	@Override
+	public void makeMove(Move m) {		
+		board[m.getRow()][m.getColumn()] = getCurrentPlayer();
 		turn++;
-		
-		return true;
+	}
+	
+	public void setAIDifficultyHard(boolean bool) {
+		isAIDifficultyHard = bool;
+	}
+	
+	public void setMaximizingPlayer(Object o) {
+		maximizingPlayer = o;
 	}
 }

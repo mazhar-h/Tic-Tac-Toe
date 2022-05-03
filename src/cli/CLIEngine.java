@@ -1,11 +1,11 @@
 package cli;
 
-import core.AI;
+import ai.AI;
+import core.Move;
 import core.TTTEngine;
 
 public class CLIEngine {
 	
-	private AI ai;
 	private TTTEngine game;
 	private CLIPrompt prompt;
 	
@@ -19,9 +19,15 @@ public class CLIEngine {
 	private void configureGame(String[] args) {
 		for (String arg : args) {
 			if ( arg.toLowerCase().equals("normal") )
-				ai = new AI(game, false, TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);		
+			{
+				game.setAIDifficultyHard(false);
+				game.setMaximizingPlayer(TTTEngine.PLAYER_2);
+			}
 			else if ( arg.toLowerCase().equals("hard") )
-				ai = new AI(game, true, TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);
+			{
+				game.setAIDifficultyHard(true);
+				game.setMaximizingPlayer(TTTEngine.PLAYER_2);
+			}
 		}
 	}
 	
@@ -47,12 +53,13 @@ public class CLIEngine {
 		if ( !prompt.enterPlayAgain() )
 			return false;
 		
+		boolean aiDiff = game.isAIDifficultyHard();
+		Object maxiPlay = game.getMaximizingPlayer();
+		
 		game = new TTTEngine();
 		prompt = new CLIPrompt(game);
-		
-		if ( ai != null)
-			ai = new AI(game, ai.isDifficultyHard(), TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);
-		
+		game.setAIDifficultyHard(aiDiff);
+		game.setMaximizingPlayer(maxiPlay);
 		return true;
 	}
 	
@@ -64,25 +71,33 @@ public class CLIEngine {
 		prompt.displayGameOver();
 		return true;
 	}
-	
-	private boolean makeMove(int[] moveCoordinate) {
-		int row = moveCoordinate[0];
-		int col = moveCoordinate[1];
 		
-		return game.makeMove( row, col );
-	}
-
 	private void moveAI() {
-		if ( ai != null 
-			&& game.getCurrentPlayer() == TTTEngine.PLAYER_2 
-			&& game.getTurn() < TTTEngine.TURN_GAMEOVER)
-			makeMove(ai.getMove());
+		if ( game.getMaximizingPlayer() == null 
+				|| game.getCurrentPlayer() != TTTEngine.PLAYER_2
+				|| game.getTurn() >= TTTEngine.TURN_GAMEOVER )
+			return;
+		
+		if ( game.isAIDifficultyHard() )
+			game.makeMove(AI.getOptimalMove(game, 
+					TTTEngine.TURN_GAMEOVER-game.getTurn()-1));
+		else
+			game.makeMove(AI.getMaybeOptimalMove(game, 
+					TTTEngine.RATIONALITY_RATE,
+					TTTEngine.TURN_GAMEOVER-game.getTurn()-1));
 	}
 	
 	private void movePlayer() {
 		prompt.displayCurrentBoard();
-
-		while ( !makeMove(prompt.enterPlayerMove()) )
+		
+		Move m = prompt.enterPlayerMove();
+		
+		while ( !game.isEmpty(m) ) 
+		{
 			prompt.displayOccupiedBoard();
+			m = prompt.enterPlayerMove();
+		}
+		
+		game.makeMove(m);
 	}
 }
