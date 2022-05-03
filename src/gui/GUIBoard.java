@@ -79,7 +79,7 @@ public class GUIBoard {
 		frame.setVisible(true);
 	}
 	
-	public void setButton(int row, int col, char player) {
-		board[row][col].markButton(player);
+	public void setButton(Move m, char player) {
+		board[m.getRow()][m.getColumn()].markButton(player);
 	}
 }
