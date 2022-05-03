@@ -5,27 +5,22 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import core.Move;
 import core.TTTEngine;
 
 public class GUIBoardButton  extends JButton {
 	
 	private boolean isClicked;
-	private int row;
-	private int column;
+	private Move move;
 	
-	public GUIBoardButton(int row, int column) {
+	public GUIBoardButton(Move move) {
 		super();
-		this.row = row;
-		this.column = column;
+		this.move = move;
 		initializeButton();
 	}
 	
-	public int getRow() {
-		return row;
-	}
-	
-	public int getColumn() {
-		return column;
+	public Move getMove() {
+		return move;
 	}
 	
 	public boolean isClicked() {

@@ -10,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import core.Move;
 import core.TTTEngine;
 
 public class GUIBoard {
@@ -32,7 +33,7 @@ public class GUIBoard {
 		
 		for (int row = 0; row < TTTEngine.BOARD_SIZE; row++)
 			for (int column = 0; column < TTTEngine.BOARD_SIZE; column++) {
-				GUIBoardButton button = new GUIBoardButton(row, column);
+				GUIBoardButton button = new GUIBoardButton(new Move(row, column));
 				board[row][column] = button;
 				button.addActionListener(listener);
 				boardPanel.add(button);

@@ -1,6 +1,7 @@
 package cli;
 import java.util.Scanner;
 
+import core.Move;
 import core.TTTEngine;
 
 public class CLIPrompt {
@@ -48,16 +49,12 @@ public class CLIPrompt {
 		return false;
 	}
 	
-	public int[] enterPlayerMove() {
-		int[] input = new int[2];
-		
+	public Move enterPlayerMove() {		
 		System.out.printf("Player %c\n", game.getCurrentPlayer());
-		
-		input[0] = enterInteger("row") - 1;
-		input[1] = enterInteger("column") - 1;
+		Move move = new Move(enterInteger("row") - 1, enterInteger("column") - 1);
 		System.out.println();
 		
-		return input;
+		return move;
 	}
 	
 	public void displayCurrentBoard() {
@@ -86,14 +83,14 @@ public class CLIPrompt {
 	}
 	
 	private void printBoard() {	
-		char[][] board = game.getBoard();
+        char[][] board = game.getBoard();
         
-		for ( char[] rowOfPositions : board ) {
-			for ( char position : rowOfPositions ) 
-				System.out.printf("%c ", position);
-			System.out.println();
-		}
-		System.out.println();
+        for ( char[] rowOfPositions : board ) {
+            for ( char position : rowOfPositions ) 
+                System.out.printf("%c ", position);
+            System.out.println();
+        }
+        System.out.println();
 	}
 	
 }

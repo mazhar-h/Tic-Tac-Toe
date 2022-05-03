@@ -4,12 +4,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
-import core.AI;
+import ai.AI;
+import core.Move;
 import core.TTTEngine;
 
 public class GUIEngine implements ActionListener {
 
-	private AI ai;
 	private TTTEngine game;
 	private GUIBoard board;
 	private GUIPrompt prompt;
@@ -24,7 +24,7 @@ public class GUIEngine implements ActionListener {
 		
 		if ( !button.isClicked() ) 
 		{
-			movePlayer(button.getRow(), button.getColumn());
+			movePlayer(button.getMove());
 			if ( game.isGameOver() ) { handleGameOver(); return; };
 			moveAI();
 			if ( game.isGameOver() ) { handleGameOver(); return; };
@@ -44,25 +44,26 @@ public class GUIEngine implements ActionListener {
 	}
 	
 	private void moveAI() {
-		if ( ai == null 
+		if ( game.getMaximizingPlayer() == null 
 				|| game.getCurrentPlayer() != TTTEngine.PLAYER_2 
 				|| game.getTurn() >= TTTEngine.TURN_GAMEOVER )
 			return;
 
-		int[] moveCoordinate = ai.getMove();
-		int row = moveCoordinate[0];
-		int col = moveCoordinate[1];
-
-		movePlayer(row, col);
+		if ( game.isAIDifficultyHard() )
+			movePlayer(AI.getOptimalMove(game, 
+					TTTEngine.TURN_GAMEOVER-game.getTurn()-1));
+		else
+			movePlayer(AI.getMaybeOptimalMove(game, 
+					TTTEngine.RATIONALITY_RATE, 
+					TTTEngine.TURN_GAMEOVER-game.getTurn()-1));
 	}
 	
-	private void movePlayer(int row, int col) {
-		board.setButton(row, col, game.getCurrentPlayer());
-		game.makeMove( row, col );
+	private void movePlayer(Move move) {
+		board.setButton(move.getRow(), move.getColumn(), game.getCurrentPlayer());
+		game.makeMove( move );
 	}
 
 	private void newGame() {
-		ai = null;
 		game = new TTTEngine();
 		prompt = new GUIPrompt(game);
 		userConfigureGame();
@@ -80,12 +81,15 @@ public class GUIEngine implements ActionListener {
 					case JOptionPane.CLOSED_OPTION:
 						System.exit(0);
 					case JOptionPane.YES_OPTION:
-						ai = new AI(game, false, TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);
+						game.setAIDifficultyHard(false);
+						game.setMaximizingPlayer(TTTEngine.PLAYER_2);
 						break;
 					case JOptionPane.NO_OPTION:
-						ai = new AI(game, true, TTTEngine.PLAYER_2, TTTEngine.PLAYER_1);
+						game.setAIDifficultyHard(true);
+						game.setMaximizingPlayer(TTTEngine.PLAYER_2);
 						break;
 				}
-		} 		break;
+				break;
+		} 		
 	}
 }
