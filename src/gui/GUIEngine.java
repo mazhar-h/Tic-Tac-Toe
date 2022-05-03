@@ -59,7 +59,7 @@ public class GUIEngine implements ActionListener {
 	}
 	
 	private void movePlayer(Move move) {
-		board.setButton(move.getRow(), move.getColumn(), game.getCurrentPlayer());
+		board.setButton(move, game.getCurrentPlayer());
 		game.makeMove( move );
 	}
 
