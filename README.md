@@ -17,6 +17,11 @@ The artificial intelligence used in player vs AI mode was possible through the [
 
 ---
 
+Compile:
+```
+javac TTTDemo.java ai\* cli\* core\* gui\*
+```
+
 Running local player vs player in the CLI version:
 ```
 java TTTDemo CLI
