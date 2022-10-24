@@ -27,7 +27,7 @@ Running local player vs player in the CLI version:
 java TTTDemo CLI
 ```
 
-Running player vs AI in the CLI version!
+Running player vs AI in the CLI version:
 ```
 java TTTDemo CLI normal
 
